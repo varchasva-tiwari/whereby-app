@@ -31,7 +31,7 @@
 	2. Any team member can mute themselves
 	3. Any team member can use their **camera**
 	4. Any team member can turn off their camera
-	2. Any team member can **chat** (publicaly)
+	2. Any team member can **chat** (publicly)
 	3. Emojis can be used in the chat
 	4. Chat messages will be deleted once member leave meeting
 	5. Teammates can share their screen
