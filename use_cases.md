@@ -11,8 +11,8 @@
 
 - **User Profile**
 	1. Logged in user can see their own profile
-	2. Logged in user can change,delete their profile pics
-	3. Logged in user can change their name,email
+	2. Logged in user can change, delete their profile pics
+	3. Logged in user can change their name, email
 	4. Logged in user can delete his account which cannot be recovered
 
 <br />
@@ -21,24 +21,27 @@
 	1. Logged(**host**) in user can conduct a meeting
 	2. Logged(**host**) in user can create meeting room
 	3. Host can change locked/unlocked status of room
-	4. Logged in user can join room (using room-name or url)
+	4. Logged in user can **join room** (using room-name or url)
 	5. Non logged in user can join meeting as guest
 
 <br />
 
 - **Inside Meeting Room**
-	1. Team members can mute themselves
-	2. Any member can chat (publicaly)
+	1. Any team member can use their **mic**
+	2. Any team member can mute themselves
+	3. Any team member can use their **camera**
+	4. Any team member can turn off their camera
+	2. Any team member can **chat** (publicaly)
 	3. Emojis can be used in the chat
 	4. Chat messages will be deleted once member leave meeting
 	5. Teammates can share their screen
-	6. Multiple members can share screen
+	6. Multiple members can **share screen**
 	7. Members can make full screen/minimize
 	8. Teammates can see list of joined people
 	9. Any member can show/hide their own tool bar
 	10. Any member can show/hide their own timer (*common timer* is used). Timer start running since meeting starts.
 	11. Team members can change their display name
-	12. Team members can record screen
+	12. Team members can **record screen**
 	13. Picture in picture
 	14. Host can ask anyone to unmute mic
 	15. Host can mute mic of any member
