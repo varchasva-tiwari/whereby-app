@@ -41,7 +41,7 @@
 	12. Team members can record screen
 	13. Picture in picture
 	14. Host can ask anyone to unmute mic
-	15. Host can mute mic of any
+	15. Host can mute mic of any member
 	16. Host can mute all mics (except his own)
 	17. Host can ask anyone to turn camera on
 	18. Host can turn off camera of any member
@@ -51,7 +51,6 @@
 	22. Host can record screen
 	23. Host can change locked/unlocked status of room
 	24. Any one can enter unlocked room without permission. For locked room one has to take permission
-	25. Team members can record screen
 
 <br />
 
