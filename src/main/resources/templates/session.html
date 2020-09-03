@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
 	<title>openvidu-mvc-java</title>
@@ -55,6 +55,12 @@
 				<div id="video-container" class="col-md-6"></div>
 			</div>
 		</div>
+		<div class="meeting-controls">
+			<button class="control-btns" id="muteAudioBtn" onclick="muteAudio()">Mute/Unmute Audio</button><br>
+			Audio status: <input type="text" disabled id="audioStatus" value="Audio unmuted"><br><br>
+			<button class="control-btns" id="hideVideoBtn" onclick="hideVideo()">Hide/Show Video</button><br>
+			Video status: <input type="text" disabled id="videoStatus" value="Video visible">
+		</div>
 	</div>
 
 	<footer class="footer">
@@ -75,6 +81,10 @@
 	var token = [[${ token }]];
 	var nickName = [[${ nickName }]];
 	var userName = [[${ userName }]];
+	var audioEnabled = true;
+	var videoEnabled = true;
+	var publisher = '';
+	var subscriber = '';
 
 	console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 
@@ -93,7 +103,7 @@
 
 		// Subscribe to the Stream to receive it
 		// HTML video will be appended to element with 'video-container' id
-		var subscriber = session.subscribe(event.stream, 'video-container');
+		subscriber = session.subscribe(event.stream, 'video-container');
 
 		// When the HTML video has been appended to DOM...
 		subscriber.on('videoElementCreated', (event) => {
@@ -125,16 +135,16 @@
 			// Here we check somehow if the user has 'PUBLISHER' role before
 			// trying to publish its stream. Even if someone modified the client's code and
 			// published the stream, it wouldn't work if the token sent in Session.connect
-			// method is not recognized as 'PUBLIHSER' role by OpenVidu Server
+			// method is not recognized as 'PUBLISHER' role by OpenVidu Server
 			if (isPublisher()) {
 
 				// --- 6) Get your own camera stream ---
 
-				var publisher = OV.initPublisher('video-container', {
+				publisher = OV.initPublisher('video-container', {
 					audioSource: undefined, // The source of audio. If undefined default microphone
 					videoSource: undefined, // The source of video. If undefined default webcam
-					publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-					publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+					publishAudio: audioEnabled,  // Whether you want to start publishing with your audio unmuted or not
+					publishVideo: videoEnabled,  	// Whether you want to start publishing with your video enabled or not
 					resolution: '640x480',  // The resolution of your video
 					frameRate: 30,			// The frame rate of your video
 					insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
@@ -168,6 +178,31 @@
 		.catch(error => {
 			console.warn('There was an error connecting to the session:', error.code, error.message);
 		});
+
+	function muteAudio() {
+		audioEnabled = !audioEnabled;
+		publisher.publishAudio(audioEnabled);
+
+		var audioStatus = document.getElementById('audioStatus');
+		if(audioEnabled == true) {
+			audioStatus.value = "Audio unmuted";
+		} else {
+			audioStatus.value = "Audio muted";
+		}
+	}
+
+	function hideVideo() {
+		videoEnabled = !videoEnabled;
+		publisher.publishVideo(videoEnabled);
+
+		var videoStatus = document.getElementById('videoStatus');
+		if(videoEnabled == true) {
+			videoStatus.value = "Video visible";
+		} else {
+			videoStatus.value = "Video hidden";
+		}
+	}
+
 
 
 	function leaveSession() {
