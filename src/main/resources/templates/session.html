@@ -40,6 +40,10 @@
 			<div id="session">
 				<div id="session-header">
 					<h1 th:text="${sessionName}" id="session-title"></h1>
+					<!-- show notification starts -->
+						<div id="start-share" hidden>screen sharing started</div>
+						<div id="stop-share" hidden>screen sharing stoped</div>
+					<!-- show notification starts -->
 					<form action="/leave-session" method="post">
 						<input type="hidden" name="session-name" th:value="${sessionName}"></input>
 						<input type="hidden" name="token" th:value="${token}"></input>
@@ -268,6 +272,17 @@
 			// publishing the new publisher (sharing screen)
 			session.publish(publisher);
 
+			// sending signal to subscribers regarding screen share started
+			session.signal({
+				data: nickName, // notifying everyone that who shared
+				to: [], // Broadcast to everyone
+				type: 'start-screenshare' // The type of message (optional)
+			}).then(() => {
+				console.log('Notified successfully sent');
+			}).catch(error => {
+				console.error(error);
+			});
+
 		});
 
 		publisher.once('accessDenied', (event) => {
@@ -302,7 +317,38 @@
 		session.unpublish(oldPublisher);
 		// publishing the new publisher (sharing camera)
 		session.publish(publisher);
+
+		// sending signal to subscribers regarding screen share stoped
+		session.signal({
+			data: nickName, // notifying everyone that who shared
+			to: [], // Broadcast to everyone
+			type: 'stop-screenshare' // The type of message (optional)
+		}).then(() => {
+			console.log('Notified successfully sent');
+		}).catch(error => {
+			console.error(error);
+		});
 	}
+
+	// showing notification when screen shared
+	session.on('signal:start-screenshare', (event) => {
+		console.log(event.data); // Message
+		// console.log(event.from); // Connection object of the sender
+		// console.log(event.type); // The type of message
+
+		var x = document.getElementById("start-share");
+		x.hidden = false;
+		setTimeout(function(){ x.hidden = true; }, 3000);
+	});
+	session.on('signal:stop-screenshare', (event) => {
+		console.log(event.data); // Message
+		// console.log(event.from); // Connection object of the sender
+		// console.log(event.type); // The type of message
+
+		var x = document.getElementById("stop-share");
+		x.hidden = false;
+		setTimeout(function(){ x.hidden = true; }, 3000);
+	});
 	// share screen function stops
 </script>
 
