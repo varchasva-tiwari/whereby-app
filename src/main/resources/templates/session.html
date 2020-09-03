@@ -58,8 +58,6 @@
 		<div class="meeting-controls">
 			<button class="control-btns" id="muteAudioBtn" onclick="muteAudio()">Mute/Unmute Audio</button><br>
 			Audio status: <input type="text" disabled id="audioStatus" value="Audio unmuted"><br><br>
-			<button class="control-btns" id="hideVideoBtn" onclick="hideVideo()">Hide/Show Video</button><br>
-			Video status: <input type="text" disabled id="videoStatus" value="Video visible">
 		</div>
 	</div>
 
@@ -190,20 +188,6 @@
 			audioStatus.value = "Audio muted";
 		}
 	}
-
-	function hideVideo() {
-		videoEnabled = !videoEnabled;
-		publisher.publishVideo(videoEnabled);
-
-		var videoStatus = document.getElementById('videoStatus');
-		if(videoEnabled == true) {
-			videoStatus.value = "Video visible";
-		} else {
-			videoStatus.value = "Video hidden";
-		}
-	}
-
-
 
 	function leaveSession() {
 
