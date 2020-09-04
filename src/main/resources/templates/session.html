@@ -56,7 +56,9 @@
 			</div>
 		</div>
 		<div class="meeting-controls">
-			<button class="control-btns" id="muteAudioBtn" onclick="muteAudio()">Mute/Unmute Audio</button><br>
+			<button class="control-btns" id="muteAudioBtn" onclick="muteMe()">Mute/Unmute Myself</button><br>
+			<button class="control-btns" id="muteParticipantBtn" onclick="muteParticipant()">Mute/Unmute Participant</button><br>
+			<button class="control-btns" id="muteAllBtn" onclick="muteAll()">Mute/Unmute All</button><br>
 			Audio status: <input type="text" disabled id="audioStatus" value="Audio unmuted"><br><br>
 		</div>
 	</div>
@@ -79,8 +81,9 @@
 	var token = [[${ token }]];
 	var nickName = [[${ nickName }]];
 	var userName = [[${ userName }]];
-	var audioEnabled = true;
-	var videoEnabled = true;
+	var myAudioEnabled = true;
+	var participantAudioEnabled = true;
+	var allAudioEnabled = true;
 	var publisher = '';
 	var subscriber = '';
 
@@ -117,6 +120,27 @@
 		removeUserData(event.stream.connection);
 	});
 
+
+	session.on('signal:muteAll', (event) => {
+		allAudioEnabled = !allAudioEnabled;
+		publisher.publishAudio(allAudioEnabled);
+		publisher.publishVideo(false);
+
+		var audioStatus = document.getElementById('audioStatus');
+		if(allAudioEnabled) {
+			audioStatus.value = "Audio unmuted";
+		} else {
+			audioStatus.value = "Audio muted";
+		}
+	});
+
+	session.on('signal:my-chat', (event) => {
+		console.log(event.data); // Message
+		console.log(event.from); // Connection object of the sender
+		console.log(event.type); // The type of message ("my-chat")
+	});
+
+
 	// --- 4) Connect to the session passing the retrieved token and some more data from
 	//        the client (in this case a JSON with the nickname chosen by the user) ---
 
@@ -141,8 +165,8 @@
 				publisher = OV.initPublisher('video-container', {
 					audioSource: undefined, // The source of audio. If undefined default microphone
 					videoSource: undefined, // The source of video. If undefined default webcam
-					publishAudio: audioEnabled,  // Whether you want to start publishing with your audio unmuted or not
-					publishVideo: videoEnabled,  	// Whether you want to start publishing with your video enabled or not
+					publishAudio: true,  // Whether you want to start publishing with your audio unmuted or not
+					publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
 					resolution: '640x480',  // The resolution of your video
 					frameRate: 30,			// The frame rate of your video
 					insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
@@ -177,16 +201,30 @@
 			console.warn('There was an error connecting to the session:', error.code, error.message);
 		});
 
-	function muteAudio() {
-		audioEnabled = !audioEnabled;
-		publisher.publishAudio(audioEnabled);
+	function muteMe() {
+		myAudioEnabled = !myAudioEnabled;
+		publisher.publishAudio(myAudioEnabled);
 
 		var audioStatus = document.getElementById('audioStatus');
-		if(audioEnabled == true) {
+		if(myAudioEnabled) {
 			audioStatus.value = "Audio unmuted";
 		} else {
 			audioStatus.value = "Audio muted";
 		}
+	}
+
+	function muteAll() {
+		session.signal({
+			to: [],
+			type: 'muteAll'
+		}) .then(() => {
+			console.log('Signal successfully sent');
+		})	.catch(error => {
+			console.error(error);
+		});
+
+		publisher.publishAudio(allAudioEnabled);
+		publisher.publishVideo(true);
 	}
 
 	function leaveSession() {
