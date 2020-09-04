@@ -5,17 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import io.openvidu.java.client.OpenVidu;
-import io.openvidu.java.client.OpenViduRole;
-import io.openvidu.java.client.Session;
-import io.openvidu.java.client.TokenOptions;
 
 @Controller
 public class SessionController {
@@ -91,7 +87,12 @@ public class SessionController {
 			try {
 
 				// Create a new OpenVidu Session
-				Session session = this.openVidu.createSession();
+				SessionProperties properties = new SessionProperties.Builder()
+						.recordingMode(RecordingMode.MANUAL)// RecordingMode.ALWAYS for automatic recording
+						.defaultOutputMode(Recording.OutputMode.COMPOSED)
+						.defaultRecordingLayout(RecordingLayout.BEST_FIT)
+						.build();
+				Session session = this.openVidu.createSession(properties);
 				// Generate a new token with the recently created tokenOptions
 				String token = session.generateToken(tokenOptions);
 
