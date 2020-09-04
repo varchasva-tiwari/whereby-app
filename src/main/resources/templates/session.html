@@ -18,7 +18,7 @@
 	<link rel="stylesheet"
 		  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 	<!-- Bootstrap -->
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
 	<script src="openvidu-browser-2.15.0.js"></script>
 </head>
@@ -104,6 +104,34 @@
 <!--        </a>-->
 <!--    </div>-->
 <!--</footer>-->
+
+<div class="container-fluid">
+	<div class="row justify-content-end">
+		<div id="messanger" class="col-12 col-sm-5 col-md-3 col-lg-3 messanger" style="padding: 0;">
+			<div id="options" class="col-12 options">
+
+			</div>
+			<div id="messageBox" class="col-12 messageBox">
+
+			</div>
+			<div id="msgForm" class="msgform col-12" style="padding: 0;">
+				<form id="messangerForm" action="/" style="height: 100%;">
+					<div class="input-group" style="height: 100%;">
+						<div class="input-group-prepend">
+							<button class="btn btn-outline-secondary" type="button">emoji</button>
+						</div>
+						<input type="text" class="form-control" placeholder="type message here..." aria-label=""
+							   aria-describedby="basic-addon1" name="msg">
+						<div class="input-group-prepend">
+							<button class="btn btn-outline-secondary" type="submit">send</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 </body>
 
@@ -456,6 +484,42 @@
 		});
 
 		/** screen share logic ends **/
+
+
+		document.getElementById("messangerForm").addEventListener("submit",submitFormHandler);
+
+	function submitFormHandler(e){
+		e.preventDefault();
+		let text = document.getElementById("messangerForm").msg.value;
+		const signal = {
+			data:JSON.stringify({
+				message : text,
+				from : userName
+			}),
+			type:"chatMessage"
+		}
+		session.signal(signal);
+		document.getElementById("messangerForm").msg.value = "";
+		document.getElementById("messangerForm").msg.focus();
+	}
+
+	 session.on("signal:chatMessage",(e)=>{
+        putMessageInBox(JSON.parse(e.data))
+    })
+
+	function putMessageInBox(data){
+		const container = createElements("div","col-12 border-dark p-2 my-1");
+		const name = createElements("h4","col-12 text-center");
+		name.textContent = data.from
+		const message = createElements("p","col-12 text-left");
+		message.textContent = data.message
+		container.append(name);
+		container.append(message);
+		document.getElementById("messageBox").append(container);
+	}
+
+
+
 </script>
 
 </html>
