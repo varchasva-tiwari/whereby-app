@@ -55,10 +55,6 @@
 			background-color: beige;
 			border-radius: 3px;
 		}
-		#chat-message {
-			height: 10em;
-			width: 50em;
-		}
 	</style>
 </head>
 
@@ -206,7 +202,7 @@
 	var allAudioEnabled = true;
 	var publisher = '';
 	var subscriber = '';
-	var showEmoji = false;
+	var showEmoji = true;
 
 	const ov = new OpenVidu();
 	let session = ov.initSession();
@@ -244,6 +240,10 @@
 	/** audio logic starts **/
 	function muteMyself() {
 		myAudioEnabled = !myAudioEnabled;
+		if(myAudioEnabled != allAudioEnabled) {
+			allAudioEnabled = !allAudioEnabled;
+		}
+
 		publisher.publishAudio(myAudioEnabled);
 
 		var audioStatus = document.getElementById('audioStatus');
@@ -267,12 +267,16 @@
 		session.signal(signal);
 	}
 
-	session.on("signal:muteAll",()=>{
-		myAudioEnabled = !myAudioEnabled;
-		publisher.publishAudio(myAudioEnabled);
+	session.on("signal:muteAll",(event)=>{
+		allAudioEnabled = !allAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			myAudioEnabled = !myAudioEnabled;
+		}
+
+		publisher.publishAudio(allAudioEnabled);
 
 		var audioStatus = document.getElementById('audioStatus');
-		if(myAudioEnabled == true) {
+		if(allAudioEnabled == true) {
 			audioStatus.value = "Audio unmuted";
 		} else {
 			audioStatus.value = "Audio muted";
