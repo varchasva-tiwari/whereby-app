@@ -456,6 +456,48 @@
 		});
 
 		/** screen share logic ends **/
+
+		/** chat messaging logic starts **/
+		// sending message
+		function sendMessage() {	// #message is form id
+			// prepare data
+			let inputText = $("#message input").val();
+			let message = {
+				sender: nickName,
+				msg: $("#message input").val()
+			};
+
+			session.signal({
+				data: JSON.stringify(message), // message
+				to: [], // Broadcast to everyone
+				from: publisher.stream.connection,
+				type: 'chatMessage' // The type of signal
+			}).then(() => {
+				console.log('Message sent successfully');
+				// make form input empty
+				$("#message input").val("")
+			}).catch(error => {
+				console.error(error);
+			});
+		}
+
+		// receiving Message
+		session.on('signal:chatMessage', (event) => {
+			let message = JSON.parse(event.data);
+			console.log(message); // Message
+			addMessage(document.getElementById("message-box"),message);
+		});
+
+		// adding message to message box
+		function addMessage(container,data){
+			const div1 = createElements("div",null,null);
+			const sender = createElements("div",null,data.sender);
+			const msg = createElements("div",null,data.msg);
+			div1.append(sender);
+			div1.append(msg);
+			container.append(div1);
+		}
+		/** chat messaging logic ends **/
 </script>
 
 </html>
