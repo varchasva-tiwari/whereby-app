@@ -21,6 +21,45 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
 	<script src="openvidu-browser-2.15.0.js"></script>
+
+	<style>
+		body {
+			background-color: #2d4f3d;
+		}
+
+		#emojis-div {
+			display: grid;
+			grid-template-rows: 50% 50%;
+			border: 1px solid white;
+			width: 17.7em;
+			height: 6em;
+			background-color: white;
+			border-radius: 8px;
+			margin-left: 10em;
+			padding: 5px;
+		}
+
+		.emojiBtnDiv {
+			margin-left: 10em;
+		}
+
+		.emojis {
+			font-size: 30px;
+			background-color: white;
+			border: 1px solid white;
+			outline: none;
+		}
+		.emojis:hover {
+			cursor: pointer;
+			border: 1px solid white;
+			background-color: beige;
+			border-radius: 3px;
+		}
+		#chat-message {
+			height: 10em;
+			width: 50em;
+		}
+	</style>
 </head>
 
 <body>
@@ -108,7 +147,7 @@
 
 <div class="container-fluid">
 	<div class="row justify-content-end">
-		<div id="messanger" class="col-12 col-sm-5 col-md-3 col-lg-3 messanger" style="padding: 0;">
+		<div id="messenger" class="col-12 col-sm-5 col-md-3 col-lg-3 messenger" style="padding: 0;">
 			<div id="options" class="col-12 options">
 
 			</div>
@@ -116,13 +155,33 @@
 
 			</div>
 			<div id="msgForm" class="msgform col-12" style="padding: 0;">
-				<form id="messangerForm" action="/" style="height: 100%;">
+				<form id="messengerForm" action="/" style="height: 100%;">
 					<div class="input-group" style="height: 100%;">
-						<div class="input-group-prepend">
-							<button class="btn btn-outline-secondary" type="button">emoji</button>
+						<div id="emojis-div" style="visibility: hidden">
+							<div class="emoji-div-1">
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise" value="✋">✋</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up" value="👍">👍</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down" value="👎">👎</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋</button>
+							</div>
+
+							<div class="emoji-div-2">
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper" value="🎉">🎉</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">😍</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">😯</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking" value="🤔">🤔</button>
+								<button class="emojis" onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">😂</button>
+							</div>
 						</div>
-						<input type="text" class="form-control" placeholder="type message here..." aria-label=""
-							   aria-describedby="basic-addon1" name="msg">
+
+						<div class="input-group-prepend emojiBtnDiv">
+							<button id="show-emojis" onclick="showHideEmojis()">emojis</button>
+						</div>
+
+						<input type="text" id="chat-message" class="form-control" placeholder="Send a chat message..." aria-label=""
+								  aria-describedby="basic-addon1" name="msg">
+
 						<div class="input-group-prepend">
 							<button class="btn btn-outline-secondary" type="submit">send</button>
 						</div>
@@ -147,6 +206,7 @@
 	var allAudioEnabled = true;
 	var publisher = '';
 	var subscriber = '';
+	var showEmoji = false;
 
 	const ov = new OpenVidu();
 	let session = ov.initSession();
@@ -219,6 +279,25 @@
 		}
 	});
 	/** audio logic ends **/
+
+
+	/** emoji logic start**/
+	function addEmojiToChat(elem) {
+		document.getElementById("chat-message").value += elem.value;
+	}
+
+	function showHideEmojis() {
+		showEmoji = !showEmoji;
+
+		let emojis = document.getElementsByClassName("emojis");
+
+		if(showEmoji == true) {
+			document.getElementById("emojis-div").style.visibility = 'hidden';
+		} else {
+			document.getElementById("emojis-div").style.visibility = 'visible';
+		}
+	}
+	/** emoji logic end**/
 
 	session.on("streamCreated",(event)=>{
 		let subscriber = session.subscribe(event.stream,"video-container");
@@ -512,11 +591,11 @@
 	/** screen share logic ends **/
 
 
-	document.getElementById("messangerForm").addEventListener("submit",submitFormHandler);
+	document.getElementById("messengerForm").addEventListener("submit",submitFormHandler);
 
 	function submitFormHandler(e){
 		e.preventDefault();
-		let text = document.getElementById("messangerForm").msg.value;
+		let text = document.getElementById("messengerForm").msg.value;
 		const signal = {
 			data:JSON.stringify({
 				message : text,
@@ -525,8 +604,8 @@
 			type:"chatMessage"
 		}
 		session.signal(signal);
-		document.getElementById("messangerForm").msg.value = "";
-		document.getElementById("messangerForm").msg.focus();
+		document.getElementById("messengerForm").msg.value = "";
+		document.getElementById("messengerForm").msg.focus();
 	}
 
 	session.on("signal:chatMessage",(e)=>{
