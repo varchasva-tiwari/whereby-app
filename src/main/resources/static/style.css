@@ -393,6 +393,7 @@ table i {
 }
 .room-statusbar-button {
 	padding: 0.5em;
+	background-color: black;
 }
 .room-statusbar {
 	display: grid;
@@ -400,15 +401,23 @@ table i {
 	justify-content: center;
 	align-items: center;
 }
+
 .participant-icon-wrapper {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
 }
+.participant-counter {
+	color: white;
+}
+.room-name {
+	color: white;
+}
 
 .room-pip-button {
 	width: 5em;
   height: 5em;
+	background-color: black;
 }
 .room-pip {
 	width: 3em;
@@ -418,6 +427,7 @@ table i {
 .room-setting-button {
 	width: 5em;
   height: 5em;
+	background-color: black;
 }
 .room-setting {
 	width: 3em;
@@ -431,6 +441,7 @@ table i {
 .room-more-button {
 	width: 5em;
   height: 5em;
+	background-color: black;
 }
 
 .avatar-wrapper {
