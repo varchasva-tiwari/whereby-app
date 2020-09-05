@@ -46,7 +46,7 @@ nav i.fa:hover {
 .vertical-center {
     width: -webkit-fit-content;
     width: fit-content;
-    margin: auto;   
+    margin: auto;
 }
 
 .vertical-center#not-logged form {
@@ -351,7 +351,7 @@ table i {
 	#join {
 		padding-top: inherit;
 	}
-	
+
 	#not-logged {
 		padding-top: inherit;
 	}
@@ -375,3 +375,71 @@ table i {
 		height: 10%;
 	}
 }
+
+/* header css starts */
+.room-header {
+	display: grid;
+	grid-template-columns: 80% 5% 5% 5% 5%;
+	grid-template-rows: 5em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.room-statusbar-container {
+	display: grid;
+	grid-template-columns: 20% 30% 50%;
+	justify-content: center;
+	align-items: center;
+}
+.room-statusbar-button {
+	padding: 0.5em;
+}
+.room-statusbar {
+	display: grid;
+	grid-template-columns: 40% 20% 40%;
+	justify-content: center;
+	align-items: center;
+}
+.participant-icon-wrapper {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.room-pip-button {
+	width: 5em;
+  height: 5em;
+}
+.room-pip {
+	width: 3em;
+	height: 3em;
+}
+
+.room-setting-button {
+	width: 5em;
+  height: 5em;
+}
+.room-setting {
+	width: 3em;
+	height: 3em;
+}
+
+.room-more-wrapper {
+	width: fit-content;
+	height: fit-content;
+}
+.room-more-button {
+	width: 5em;
+  height: 5em;
+}
+
+.avatar-wrapper {
+	width: 5em;
+  height: 5em;
+}
+.avatar-square {
+	width: 4em;
+	height: 4em;
+	padding: 1em;
+}
+/* header css ends */
