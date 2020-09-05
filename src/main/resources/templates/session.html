@@ -31,16 +31,11 @@
 			display: grid;
 			grid-template-rows: 50% 50%;
 			border: 1px solid white;
-			width: 17.7em;
-			height: 6em;
+			width: 100%;
+			height: 100%;
 			background-color: white;
 			border-radius: 8px;
-			margin-left: 10em;
 			padding: 5px;
-		}
-
-		.emojiBtnDiv {
-			margin-left: 10em;
 		}
 
 		.emojis {
@@ -175,7 +170,7 @@
 							<button id="show-emojis" onclick="showHideEmojis()">emojis</button>
 						</div>
 
-						<input type="text" id="chat-message" class="form-control" placeholder="Send a chat message..." aria-label=""
+						<input type="text" class="form-control" placeholder="Send a chat message..." aria-label=""
 								  aria-describedby="basic-addon1" name="msg">
 
 						<div class="input-group-prepend">
@@ -244,6 +239,12 @@
 			allAudioEnabled = !allAudioEnabled;
 		}
 
+        if(myAudioEnabled == true) {
+            if(confirm("turn microphone on")){
+                publisher.publishAudio(myAudioEnabled);
+            }
+        }
+
 		publisher.publishAudio(myAudioEnabled);
 
 		var audioStatus = document.getElementById('audioStatus');
@@ -273,7 +274,13 @@
 			myAudioEnabled = !myAudioEnabled;
 		}
 
-		publisher.publishAudio(allAudioEnabled);
+        if(allAudioEnabled == true) {
+            if(confirm("turn microphone on")){
+                publisher.publishAudio(allAudioEnabled);
+            }
+        }
+
+        publisher.publishAudio(allAudioEnabled);
 
 		var audioStatus = document.getElementById('audioStatus');
 		if(allAudioEnabled == true) {
@@ -287,15 +294,13 @@
 
 	/** emoji logic start**/
 	function addEmojiToChat(elem) {
-		document.getElementById("chat-message").value += elem.value;
+        document.getElementById("messengerForm").msg.value += elem.value;
 	}
 
 	function showHideEmojis() {
 		showEmoji = !showEmoji;
 
-		let emojis = document.getElementsByClassName("emojis");
-
-		if(showEmoji == true) {
+		if(showEmoji === true) {
 			document.getElementById("emojis-div").style.visibility = 'hidden';
 		} else {
 			document.getElementById("emojis-div").style.visibility = 'visible';
@@ -426,20 +431,36 @@
 	function addPannel(container,stream){
 		const div = createElements("div","d-flex w-100 justify-content-around p-1 my-2");
 		const h4 = createElements("h3",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
+
 		const buttonOff = createElements("button","btn btn-danger","Video off");
 		const buttonOn = createElements("button","btn btn-success","Video On");
+
+		const audioOff = createElements("button","btn btn-danger","Audio off");
+		const audioOn = createElements("button","btn btn-success","Audio On");
+
 		const buttonSub = createElements("button","btn btn-success","Subscribe to Video toggle");
+
 		buttonOff.id = stream.connection.connectionId+"-"+1;
 		buttonOn.id = stream.connection.connectionId+"-"+2;
 		buttonSub.id = stream.connection.connectionId+"-"+3;
+
+		audioOff.id = stream.connection.connectionId+"-"+4;
+		audioOn.id = stream.connection.connectionId+"-"+5;
+
 		div.append(h4);
 		div.append(buttonOff);
 		div.append(buttonOn);
 		div.append(buttonSub);
+		div.append(audioOff);
+		div.append(audioOn);
+
 		container.append(div);
 		buttonOff.addEventListener("click",(e)=>turnOffVideo(e))
 		buttonOn.addEventListener("click",(e)=>turnOnVideo(e))
 		buttonSub.addEventListener("click",(e)=>toggleSubscriber(e))
+
+		audioOff.addEventListener("click",(e)=>turnOffAudio(e))
+		audioOn.addEventListener("click",(e)=>turnOnAudio(e))
 	}
 
 	function createElements(type,css=null,content=null){
@@ -470,6 +491,46 @@
 		signal.to.push(session.streamManagers.find(member=>member.stream.connection.connectionId == id).stream.connection)
 		session.signal(signal);
 	}
+
+	function turnOffAudio(e){
+		const signal = {
+			type:"turnOffAudio",
+			to:[]
+		}
+		const id = e.target.id.split("-")[0]
+		console.log(id)
+		signal.to.push(session.streamManagers.find(member=>member.stream.connection.connectionId === id).stream.connection)
+		session.signal(signal);
+	}
+
+	function turnOnAudio(e){
+		const signal = {
+			type:"turnOnAudio",
+			to:[]
+		}
+		const id = e.target.id.split("-")[0]
+		console.log(id)
+		signal.to.push(session.streamManagers.find(member=>member.stream.connection.connectionId === id).stream.connection)
+		session.signal(signal);
+	}
+
+	session.on("signal:turnOffAudio",()=>{
+		publisher.publishAudio(false);
+		myAudioEnabled = false;
+		allAudioEnabled = false;
+		document.getElementById('audioStatus').value = 'Audio muted';
+	});
+
+	session.on("signal:turnOnAudio",()=>{
+		if(! publisher.stream.audioActive){
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(true);
+			}
+		}
+		myAudioEnabled = true;
+		allAudioEnabled = true;
+		document.getElementById('audioStatus').value = 'Audio unmuted';
+	});
 
 	function toggleSubscriber(e){
 		let id = e.target.id.split("-")[0];
@@ -627,5 +688,4 @@
 		document.getElementById("messageBox").append(container);
 	}
 </script>
-
 </html>
