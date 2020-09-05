@@ -115,12 +115,14 @@
 				</button>
 			</div>
 			<div class="avatar-wrapper">
-				<div class="avatar-square">
-					<svg class="initials" viewBox="-4 -4 8 8" width="3em" height="3em">
-						<text x="0" y="0" text-anchor="middle" dominant-baseline="central"
-						font-size="1em" th:text="${#strings.toUpperCase(#strings.substring(userName,0,1))}"></text>
-					</svg>
-				</div>
+				<button type="button" class="avatar-button" name="more">
+					<div class="avatar-square">
+						<svg class="initials" viewBox="-4 -4 8 8" width="3em" height="3em">
+							<text x="0" y="0" text-anchor="middle" dominant-baseline="central"
+							font-size="1em" th:text="${#strings.toUpperCase(#strings.substring(userName,0,1))}"></text>
+						</svg>
+					</div>
+				</button>
 			</div>
 		</header>
 	</div>

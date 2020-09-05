@@ -434,12 +434,16 @@ table i {
 }
 
 .avatar-wrapper {
+	width: fit-content;
+	height: fit-content;
+}
+.avatar-button {
 	width: 5em;
-  height: 5em;
+	height: 5em;
 }
 .avatar-square {
 	width: 4em;
 	height: 4em;
-	padding: 1em;
+	padding: 0.5em;
 }
 /* header css ends */
