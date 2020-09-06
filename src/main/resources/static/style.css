@@ -46,7 +46,7 @@ nav i.fa:hover {
 .vertical-center {
     width: -webkit-fit-content;
     width: fit-content;
-    margin: auto;   
+    margin: auto;
 }
 
 .vertical-center#not-logged form {
@@ -351,7 +351,7 @@ table i {
 	#join {
 		padding-top: inherit;
 	}
-	
+
 	#not-logged {
 		padding-top: inherit;
 	}

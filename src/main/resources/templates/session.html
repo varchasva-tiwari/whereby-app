@@ -4,42 +4,28 @@
 	<title>openvidu-mvc-java</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
-	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<!-- Bootstrap -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-		  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-		  crossorigin="anonymous"></link>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-			crossorigin="anonymous"></script>
 	<link rel="stylesheet"
 		  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link rel="styleSheet" href="style.css" type="text/css" media="screen"></link>
+
+	<link rel="stylesheet" href="customStyle.css"></link>
 	<script src="openvidu-browser-2.15.0.js"></script>
 
 	<style>
-		body {
-			background-color: #2d4f3d;
-		}
-
 		#emojis-div {
 			display: grid;
 			grid-template-rows: 50% 50%;
 			border: 1px solid white;
-			width: 100%;
-			height: 100%;
-			background-color: white;
+			width: 50px;
+			height: 30px;
+			background-color: lightgrey;
 			border-radius: 8px;
-			padding: 5px;
+			padding: 3px;
 		}
 
 		.emojis {
-			font-size: 30px;
+			font-size: 1.3rem;
 			background-color: white;
 			border: 1px solid white;
 			outline: none;
@@ -50,139 +36,138 @@
 			background-color: beige;
 			border-radius: 3px;
 		}
+
+		video{
+			width:200px
+		}
 	</style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-default">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="/">
-				<img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
-			<a class="navbar-brand nav-icon"
-			   href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java"
-			   title="GitHub Repository"
-			   target="_blank">
-				<i class="fa fa-github" aria-hidden="true"></i>
-			</a>
-			<a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/"
-			   title="Documentation" target="_blank">
-				<i class="fa fa-book" aria-hidden="true"></i>
-			</a>
-		</div>
-	</div>
-</nav>
 
 
-<div class="container">
-	<div class="row justify-content-center">
-		<div id="xx" class="btn btn-danger">turn off video</div>
-		<div id="yy" class="btn btn-success">turn on video</div>
-		<div>
-			<button id="buttonShare" class="btn btn-danger" onclick="shareScreen()">Share Screen</button>
-		</div>
-		<div class="meeting-controls">
-			<button class="control-btns" id="muteMyselfBtn" onclick="muteMyself()">Mute/Unmute Myself</button><br>
-			<button class="control-btns" id="muteAllBtn" onclick="muteAll()">Mute/Unmute All</button><br>
-			Audio status: <input type="text" disabled id="audioStatus" value="Audio unmuted"><br><br>
-		</div>
-		<div id="start-share" hidden class="btn btn-danger">screen sharing started</div>
-		<div id="stop-share" hidden class="btn btn-danger">screen sharing stoped</div>
-	</div>
-</div>
+<div class="container colsWithChat">
 
-<div id="main-container" class="container">
-	<div id="logged">
-		<div id="session">
-			<div id="session-header">
-				<h1 th:text="${sessionName}" id="session-title"></h1>
-				<form action="/leave-session" method="post">
-					<input type="hidden" name="session-name" th:value="${sessionName}"></input>
-					<input type="hidden" name="token" th:value="${token}"></input>
-					<button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
-							onclick="leaveSession()">
-						Leave session
-					</button>
-				</form>
-			</div>
-			<div id="main-video" class="col-md-6">
-				<p class="nickName"></p>
-				<p class="userName"></p>
-				<video autoplay="autoplay" playsinline="true"></video>
-			</div>
-			<div id="video-container" class="col-md-6"></div>
-		</div>
-	</div>
-</div>
+	<div id="main" class="mainWithChat">
+
+
+		<div class="header"></div>
 
 
 
-<div class="conatiner">
-	<div class="row justify-content-center">
-		<div id="pannel" class="col-6 d-flex flex-column justify-content-start align-items-center">
+		<div class="videoContainer">
 
-		</div>
-	</div>
-</div>
-
-<div style="height:100px"></div>
-<!--<footer class="footer">-->
-<!--    <div class="container">-->
-<!--        <div class="text-muted">OpenVidu © 2017</div>-->
-<!--        <a href="http://www.openvidu.io/" target="_blank">-->
-<!--            <img class="openvidu-logo" src="images/openvidu_globe_bg_transp_cropped.png"/>-->
-<!--        </a>-->
-<!--    </div>-->
-<!--</footer>-->
-
-<div class="container-fluid">
-	<div class="row justify-content-end">
-		<div id="messenger" class="col-12 col-sm-5 col-md-3 col-lg-3 messenger" style="padding: 0;">
-			<div id="options" class="col-12 options">
-
-			</div>
-			<div id="messageBox" class="col-12 messageBox">
-
-			</div>
-			<div id="msgForm" class="msgform col-12" style="padding: 0;">
-				<form id="messengerForm" action="/" style="height: 100%;">
-					<div class="input-group" style="height: 100%;">
-						<div id="emojis-div" style="visibility: hidden">
-							<div class="emoji-div-1">
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise" value="✋">✋</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up" value="👍">👍</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down" value="👎">👎</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋</button>
-							</div>
-
-							<div class="emoji-div-2">
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper" value="🎉">🎉</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">😍</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">😯</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking" value="🤔">🤔</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">😂</button>
-							</div>
+			<div id="main-container">
+				<div id="logged">
+					<div id="session">
+						<div id="session-header">
+							<h1 th:text="${sessionName}" id="session-title"></h1>
+							<form action="/leave-session" method="post">
+								<input type="hidden" name="session-name" th:value="${sessionName}"></input>
+								<input type="hidden" name="token" th:value="${token}"></input>
+								<button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
+										onclick="leaveSession()">
+									Leave session
+								</button>
+							</form>
 						</div>
-
-						<div class="input-group-prepend emojiBtnDiv">
-							<button id="show-emojis" onclick="showHideEmojis()">emojis</button>
+						<div id="main-video" class="col-md-6">
+							<p class="nickName"></p>
+							<p class="userName"></p>
+							<video autoplay="autoplay" playsinline="true"></video>
 						</div>
+						<div id="video-container" class="col-md-6"></div>
+					</div>
+				</div>
+			</div>
 
-						<input type="text" class="form-control" placeholder="Send a chat message..." aria-label=""
-								  aria-describedby="basic-addon1" name="msg">
 
-						<div class="input-group-prepend">
-							<button class="btn btn-outline-secondary" type="submit">send</button>
+
+		</div>
+
+
+
+		<div class="footer"></div>
+	</div>
+
+	<div class="chat">
+		<div class="chatHeader">
+			<div class="buttonContainer">
+				<button onclick="showMembers()" id="memberListButton">members</button>
+				<button class="clickChatHeaderButton" onclick="showChat()" id="chatButton">chat</button>
+				<button onclick="toggleChat()">[X]</button>
+			</div>
+		</div>
+		<div  id="members" class="memberList" hidden>
+
+			<div class="memberListContent">
+				<div>
+					<p>In the room</p>
+					<div>
+						<span class="subUnsubBtn">....</span>
+						<div class="subUnsubOptns">
+							<div id="xx">Turn all cams off</div>
+							<div id="yy">Turn all cams on</div>
+							<div id="muteAllBtn">Turn all mics on/off</div>
 						</div>
 					</div>
-				</form>
+				</div>
+
 			</div>
+
+		</div>
+
+		<div id="messageBox" class="chatMessageContainer" >
+
+<!--			chat messsages-->
+
+		</div>
+		<div id="msgForm" class="chatFooter" style="padding: 0;">
+			<form id="messengerForm" style="height: 100%;">
+				<div id="toggleEmoji" hidden=true style="height: 100%;">
+					<div id="emojis-div">
+						<div class="emoji-div-1">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise"
+								   value="✋">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up"
+								   value="👍">👍
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down"
+								   value="👎">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋
+						</div>
+
+						<div class="emoji-div-2">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper"
+								   value="🎉">🎉
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking"
+								   value="🤔">
+							<input type="button" class="emojis"
+								   onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">
+						</div>
+					</div>
+				</div>
+				<div class="emojiBtnDiv inputContianer">
+					<input type="button" id="show-emojis" onclick="showHideEmojis()" value="emojis">
+					<input type="text" placeholder="Send a chat message..." name="msg">
+					<button type="submit">send</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
-
 
 </body>
 
@@ -218,7 +203,7 @@
 					mirror:true
 				})
 				publisher.on("videoElementCreated",(event)=>{
-					addPannel(document.getElementById("pannel"),publisher.stream);
+					addPannel(document.querySelector(".memberListContent"),publisher.stream);
 
 					// Init the main video with ours and append our data
 					var userData = {
@@ -292,26 +277,12 @@
 	/** audio logic ends **/
 
 
-	/** emoji logic start**/
-	function addEmojiToChat(elem) {
-        document.getElementById("messengerForm").msg.value += elem.value;
-	}
 
-	function showHideEmojis() {
-		showEmoji = !showEmoji;
-
-		if(showEmoji === true) {
-			document.getElementById("emojis-div").style.visibility = 'hidden';
-		} else {
-			document.getElementById("emojis-div").style.visibility = 'visible';
-		}
-	}
-	/** emoji logic end**/
 
 	session.on("streamCreated",(event)=>{
 		let subscriber = session.subscribe(event.stream,"video-container");
 		subscriber.on("videoElementCreated",(subEvent)=>{
-			addPannel(document.getElementById("pannel"),event.stream);
+			addPannel(document.querySelector(".memberListContent"),event.stream);
 			// Add a new HTML element for the user's name and nickname over its video
 			appendUserData(subEvent.element, subscriber.stream.connection);
 		})
@@ -429,44 +400,46 @@
 	});
 
 	function addPannel(container,stream){
-		const div = createElements("div","d-flex w-100 justify-content-around p-1 my-2");
-		const h4 = createElements("h3",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
+		const div = createElements("div");
+		const name = createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
 
-		const buttonOff = createElements("button","btn btn-danger","Video off");
-		const buttonOn = createElements("button","btn btn-success","Video On");
+		const videoOnOffToggle = createElements("div",null,null,"<i class='fa fa-video-camera' aria-hidden='false'></i>")
+		const audioOnOffToggle = createElements("div",null,null,"<i class='fa fa-microphone-slash'></i>")
 
-		const audioOff = createElements("button","btn btn-danger","Audio off");
-		const audioOn = createElements("button","btn btn-success","Audio On");
+		const subUnsubOptnsContainer = createElements("div",null,null,"<span class='subUnsubBtn'>....</span>")
+		const subUnsubOptns = createElements("div","subUnsubOptns")
 
-		const buttonSub = createElements("button","btn btn-success","Subscribe to Video toggle");
+		const subUnsubVideo = createElements("div",null,"unsubscribe to video");
+		const subUnsubAudio = createElements("div",null,"unsubscribe to audio");
 
-		buttonOff.id = stream.connection.connectionId+"-"+1;
-		buttonOn.id = stream.connection.connectionId+"-"+2;
-		buttonSub.id = stream.connection.connectionId+"-"+3;
+		subUnsubOptns.append(subUnsubVideo);
+		subUnsubOptns.append(subUnsubAudio);
+		subUnsubOptnsContainer.append(subUnsubOptns);
 
-		audioOff.id = stream.connection.connectionId+"-"+4;
-		audioOn.id = stream.connection.connectionId+"-"+5;
+		videoOnOffToggle.id=stream.connection.connectionId+"-"+1;
+		audioOnOffToggle.id=stream.connection.connectionId+"-"+2;
+		subUnsubVideo.id = stream.connection.connectionId+"-"+3;
+		subUnsubAudio.id = stream.connection.connectionId+"-"+4;
 
-		div.append(h4);
-		div.append(buttonOff);
-		div.append(buttonOn);
-		div.append(buttonSub);
-		div.append(audioOff);
-		div.append(audioOn);
+
+		div.append(name);
+		div.append(videoOnOffToggle);
+		div.append(audioOnOffToggle);
+		div.append(subUnsubOptnsContainer);
 
 		container.append(div);
-		buttonOff.addEventListener("click",(e)=>turnOffVideo(e))
-		buttonOn.addEventListener("click",(e)=>turnOnVideo(e))
-		buttonSub.addEventListener("click",(e)=>toggleSubscriber(e))
 
-		audioOff.addEventListener("click",(e)=>turnOffAudio(e))
-		audioOn.addEventListener("click",(e)=>turnOnAudio(e))
+		videoOnOffToggle.addEventListener("click",(e)=>turnOnOffVideo(e))
+		audioOnOffToggle.addEventListener("click",(e)=>turnOnOffAudio(e))
+		subUnsubVideo.addEventListener("click",(e)=>toggleVideoOfSubscriber(e))
+		subUnsubAudio.addEventListener("click",(e)=>toggleAudioOfSubscriber(e))
 	}
 
-	function createElements(type,css=null,content=null){
+	function createElements(type,css=null,content=null,innerhtml=null){
 		const ele = document.createElement(type);
 		if(css!=null) ele.className = css;
 		if(content!=null) ele.innerText = content;
+		if(innerhtml!=null)ele.innerHTML = innerhtml;
 		return ele;
 	}
 
@@ -487,10 +460,26 @@
 			to:[]
 		}
 		const id = e.target.id.split("-")[0]
-		console.log(id)
 		signal.to.push(session.streamManagers.find(member=>member.stream.connection.connectionId == id).stream.connection)
 		session.signal(signal);
 	}
+
+
+	function turnOnOffVideo(e){
+		const id = e.target.closest("div").id.split("-")[0]
+		let member = session.streamManagers.find(member=>member.stream.connection.connectionId == id)
+		e = {
+			target:{
+				id
+			}
+		}
+		if(member.stream.videoActive){
+			turnOffVideo(e)
+		}else{
+			turnOnVideo(e)
+		}
+	}
+
 
 	function turnOffAudio(e){
 		const signal = {
@@ -514,11 +503,28 @@
 		session.signal(signal);
 	}
 
+
+	function turnOnOffAudio(e){
+		const id = e.target.closest("div").id.split("-")[0]
+		let member = session.streamManagers.find(member=>member.stream.connection.connectionId == id)
+		e = {
+			target:{
+				id
+			}
+		}
+		if(member.stream.audioActive){
+			turnOffAudio(e)
+		}else{
+			turnOnAudio(e)
+		}
+	}
+
+
+
 	session.on("signal:turnOffAudio",()=>{
 		publisher.publishAudio(false);
 		myAudioEnabled = false;
 		allAudioEnabled = false;
-		document.getElementById('audioStatus').value = 'Audio muted';
 	});
 
 	session.on("signal:turnOnAudio",()=>{
@@ -529,20 +535,28 @@
 		}
 		myAudioEnabled = true;
 		allAudioEnabled = true;
-		document.getElementById('audioStatus').value = 'Audio unmuted';
 	});
 
-	function toggleSubscriber(e){
+	function toggleVideoOfSubscriber(e){
 		let id = e.target.id.split("-")[0];
-		console.log(id);
 		let subscriber = session.streamManagers.find(member=>member.stream.connection.connectionId === id)
-		console.log(subscriber);
 		if("subscribeToAudio" in subscriber.properties){
 			subscriber.subscribeToVideo(! subscriber.stream.videoActive)
 		}else if("publishVideo" in subscriber.properties){
 			subscriber.publishVideo(! subscriber.stream.videoActive)
 		}
 	}
+
+	function toggleAudioOfSubscriber(e){
+		let id = e.target.id.split("-")[0];
+		let subscriber = session.streamManagers.find(member=>member.stream.connection.connectionId === id)
+		if("subscribeToAudio" in subscriber.properties){
+			subscriber.subscribeToAudio(! subscriber.stream.audioActive)
+		}else if("publishVideo" in subscriber.properties){
+			subscriber.publishAudio(! subscriber.stream.audioActive)
+		}
+	}
+
 	/** video on/off logic ends **/
 
 	/** screen share logic starts **/
@@ -655,7 +669,6 @@
 
 	/** screen share logic ends **/
 
-
 	document.getElementById("messengerForm").addEventListener("submit",submitFormHandler);
 
 	function submitFormHandler(e){
@@ -671,6 +684,7 @@
 		session.signal(signal);
 		document.getElementById("messengerForm").msg.value = "";
 		document.getElementById("messengerForm").msg.focus();
+		document.getElementById("emojis-div").hidden = true;
 	}
 
 	session.on("signal:chatMessage",(e)=>{
@@ -678,14 +692,79 @@
 	})
 
 	function putMessageInBox(data){
-		const container = createElements("div","col-12 border-dark p-2 my-1");
-		const name = createElements("h4","col-12 text-center");
+		const container = createElements("div","chatmsg");
+		const nameAndMsg = createElements("div","nameAndMsg");
+		const initialContainer = createElements("div","initials");
+		const initials = createElements("div");
+		const time = createElements("div","time");
+		initials.textContent = data.from.slice(0,2).toLocaleUpperCase()
+		const name = createElements("div","name");
 		name.textContent = data.from
-		const message = createElements("p","col-12 text-left");
+		const message = createElements("div","msg");
 		message.textContent = data.message
-		container.append(name);
-		container.append(message);
+		nameAndMsg.append(name);
+		nameAndMsg.append(message);
+		initialContainer.append(initials);
+		const date = new Date();
+		let h = date.getHours()
+		let m = date.getMinutes()
+		if(h>12){
+			h = Math.abs(h-12)
+		}if(h == 0){
+			h = 12;
+		}
+		time.textContent = h+":"+m;
+		container.append(initialContainer);
+		container.append(nameAndMsg);
+		container.append(time);
 		document.getElementById("messageBox").append(container);
 	}
+
+	/** emoji logic start**/
+	function addEmojiToChat(elem) {
+        document.getElementById("messengerForm").msg.value += elem.value;
+	}
+
+	function showHideEmojis() {
+		document.getElementById("toggleEmoji").hidden = ! document.getElementById("toggleEmoji").hidden
+	}
+	/** emoji logic end**/
+
+<!--	****ui logic****-->
+
+function toggleChat(){
+    const chatBox = document.querySelector(".chat");
+    const main = document.querySelector("#main");
+    chatBox.hidden = ! chatBox.hidden;
+    main.classList.toggle("mainWithChat");
+    main.classList.toggle("mainFullWindow");
+
+}
+
+function showMembers(){
+    if(! document.querySelector("#main").classList.contains("mainWithChat")){
+        toggleChat();
+    }
+    document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
+    document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
+    document.querySelector("#messageBox").hidden = true;
+    document.querySelector("#members").hidden = false;
+    document.querySelector("#messengerForm").hidden = true;
+
+}
+
+function showChat(){
+    if(! document.querySelector("#main").classList.contains("mainWithChat")){
+        toggleChat();
+    }
+    document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
+    document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
+    document.querySelector("#messageBox").hidden = false;
+    document.querySelector("#members").hidden = true;
+    document.querySelector("#messengerForm").hidden = false;
+
+}
+
+
 </script>
 </html>
