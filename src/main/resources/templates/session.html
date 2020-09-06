@@ -1,18 +1,18 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
-	<title th:text="${sessionName}"></title>
+    <title th:text="${sessionName}"></title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<link rel="stylesheet"
-		  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
-	<link rel="stylesheet" href="customStyle.css"></link>
-	<script src="openvidu-browser-2.15.0.js"></script>
+    <link rel="stylesheet" href="customStyle.css"></link>
+    <script src="openvidu-browser-2.15.0.js"></script>
 
-	<style>
+    <style>
 		#emojis-div {
 			display: grid;
 			grid-template-rows: 50% 50%;
@@ -38,193 +38,264 @@
 		}
 
 		video{
-			width:200px
+			width:200px;
 		}
-	</style>
+
+		.footerBtnsDiv {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+			grid-column-gap: 2em;
+		}
+
+		.footerBtnDiv {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.footerBtn {
+			border-radius: 1em;
+			width: 4em;
+			outline: none;
+		}
+
+		.footerBtn:hover {
+			cursor: pointer;
+		}
+
+		.footerImgs {
+			width: 2em;
+			height: 3em;
+		}
+
+
+    </style>
 </head>
 
 <body>
 
 
-
 <div class="container colsWithChat">
 
-	<div id="main" class="mainWithChat">
+    <div id="main" class="mainWithChat">
+
+        <div class="header">
+            <div class="room-statusbar-container">
+                <div class="room-logo">
+                    <a href="/">
+                        <div class="logo-wrapper">
+                            <img class="logo-img" src="images/whereby-logo.png" alt="Whereby"/>
+                        </div>
+                    </a>
+                </div>
+                <button type="button" name="button" class="room-statusbar-button">
+                    <div class="room-statusbar">
+                        <div class="room-name-wrapper">
+                            <span class="room-name" th:text="${sessionName}"></span>
+                        </div>
+                        <div class="lock-wrapper">
+                            <i th:if="${locked==true}" class="fa fa-lock" style="font-size:3.5vh;color:white"></i>
+                            <i th:unless="${locked==true}" class="fa fa-unlock" style="font-size:3.5vh;color:white"></i>
+                            </svg>
+                        </div>
+                        <div class="participant-icon-wrapper">
+                            <div class="participant-counter">
+                                1/4
+                            </div>
+                            <i class="fa fa-group" style="font-size:3.5vh;color:white"></i>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div class="room-extras">
+                <button type="button" class="room-pip-button" name="pip">
+                    <div class="room-pip">
+                        <i class="fa fa-external-link" style="font-size:3.5vh;color:white"></i>
+                    </div>
+                </button>
+                <button type="button" class="room-setting-button" name="setting">
+                    <div class="room-setting">
+                        <i class="fa fa-gear" style="font-size:3.5vh;color:white"></i>
+                    </div>
+                </button>
+                <div class="room-more-wrapper">
+                    <button type="button" class="room-more-button" name="more">
+                        <div class="room-more">
+                            <i class="fa fa-ellipsis-h" style="font-size:3.5vh;color:white"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="avatar-wrapper">
+                    <button type="button" class="avatar-button" name="profile" onclick="profileToggle()">
+                        <div class="avatar-square">
+                            <svg class="initials" viewBox="-4 -4 8 8" width="3vh" height="3.5vh">
+                                <text x="0" y="0" text-anchor="middle" dominant-baseline="central"
+                                      font-size="2vh"
+                                      th:text="${#strings.toUpperCase(#strings.substring(userName,0,1))}"></text>
+                            </svg>
+                        </div>
+                    </button>
+                    <div id="profileDropdown" class="dropdown-content">
+                        <div class="menu">
+                            <a href="#profile" target="_blank" class="">
+                                <div class="">
+                                    Edit profile
+                                </div>
+                            </a>
+                            <button type="button" name="changeName" class="">
+                                <div class="">
+                                    Set display name
+                                </div>
+                            </button>
+                            <div class="menu-divider"></div>
+                            <button type="button" name="logout">
+                                <div class="">
+                                    Log out
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-		<div class="header">
-				<div class="room-statusbar-container">
-					<div class="room-logo">
-						<a href="/">
-							<div class="logo-wrapper">
-								<img class="logo-img" src="images/whereby-logo.png" alt="Whereby"/>
-							</div>
-						</a>
-					</div>
-					<button type="button" name="button" class="room-statusbar-button">
-						<div class="room-statusbar">
-							<div class="room-name-wrapper">
-								<span class="room-name" th:text="${sessionName}"></span>
-							</div>
-							<div class="lock-wrapper">
-								<i th:if="${locked==true}" class="fa fa-lock" style="font-size:3.5vh;color:white"></i>
-								<i th:unless="${locked==true}" class="fa fa-unlock" style="font-size:3.5vh;color:white"></i>
-								</svg>
-							</div>
-							<div class="participant-icon-wrapper">
-								<div class="participant-counter">
-									1/4
-								</div>
-								<i class="fa fa-group" style="font-size:3.5vh;color:white"></i>
-							</div>
-						</div>
-					</button>
-				</div>
-				<div class="room-extras">
-					<button type="button" class="room-pip-button" name="pip">
-						<div class="room-pip">
-							<i class="fa fa-external-link" style="font-size:3.5vh;color:white"></i>
-						</div>
-					</button>
-					<button type="button" class="room-setting-button" name="setting">
-						<div class="room-setting">
-							<i class="fa fa-gear" style="font-size:3.5vh;color:white"></i>
-						</div>
-					</button>
-					<div class="room-more-wrapper">
-						<button type="button" class="room-more-button" name="more">
-							<div class="room-more">
-								<i class="fa fa-ellipsis-h" style="font-size:3.5vh;color:white"></i>
-							</div>
-						</button>
-					</div>
-					<div class="avatar-wrapper">
-						<button type="button" class="avatar-button" name="profile" onclick="profileToggle()">
-							<div class="avatar-square">
-								<svg class="initials" viewBox="-4 -4 8 8" width="3vh" height="3.5vh">
-									<text x="0" y="0" text-anchor="middle" dominant-baseline="central"
-									font-size="2vh" th:text="${#strings.toUpperCase(#strings.substring(userName,0,1))}"></text>
-								</svg>
-							</div>
-						</button>
-						<div id="profileDropdown" class="dropdown-content">
-							<div class="menu">
-								<a href="#profile" target="_blank" class="">
-									<div class="">
-										Edit profile
-									</div>
-								</a>
-								<button type="button" name="changeName" class="">
-									<div class="">
-										Set display name
-									</div>
-								</button>
-								<div class="menu-divider"></div>
-								<button type="button" name="logout">
-									<div class="">
-										Log out
-									</div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-		</div>
+        <div id="main-container" class="videoContainer">
+            <div class="oneVideo" id="main-video">
+                <p class="nickName"></p>
+                <p class="userName"></p>
+                <video autoplay="autoplay" playsinline="true"></video>
+            </div>
+            <div id="video-container" class="allVideo"></div>
+        </div>
 
+        <div class="footer">
+            <div class="footerBtnsDiv">
+                <div class="footerBtnDiv">
+                    <button type="button" id="camBtn" class="footerBtn"><img src="footer/video-camera.svg"
+                                                                             class="footerImgs"
+                                                                             onclick="footerVideoToggle()"></button>
+                    <label for="camBtn">Cam</label>
+                </div>
 
+                <div class="footerBtnDiv">
+                    <button type="button" id="micBtn" class="footerBtn"><img src="footer/mic.svg" class="footerImgs"
+                                                                             onclick="footerAudioToggle()"></button>
+                    <label for="micBtn">Mic</label>
+                </div>
 
-		<div id="main-container" class="videoContainer">
-			<div class="oneVideo" id="main-video">
-				<p class="nickName"></p>
-				<p class="userName"></p>
-				<video autoplay="autoplay" playsinline="true"></video>
-			</div>
-			<div id="video-container" class="allVideo"></div>
+                <div class="footerBtnDiv">
+                    <button type="button" id="shareBtn" class="footerBtn"><img src="footer/computer.svg"
+                                                                               class="footerImgs"
+                                                                               onclick="footerScreenToggle()"></button>
+                    <label for="shareBtn">Share</label>
+                </div>
 
+                <div class="footerBtnDiv">
+                    <button type="button" id="chatBtn" class="footerBtn"><img src="footer/communication.svg"
+                                                                              class="footerImgs"
+                                                                              onclick="footerChatToggle()"></button>
+                    <label for="chatBtn">Chat</label>
+                </div>
 
-		</div>
+                <div class="footerBtnDiv">
+                    <button type="button" id="peopleBtn" class="footerBtn"><img src="footer/group.svg"
+                                                                                class="footerImgs"
+                                                                                onclick="footerPeopleToggle()"></button>
+                    <label for="peopleBtn">People</label>
+                </div>
 
+                <form action="/leave-session" method="post">
+                    <input type="hidden" name="session-name" th:value="${sessionName}"></input>
+                    <input type="hidden" name="token" th:value="${token}"></input>
+                    <div class="footerBtnDiv">
+                        <button type="submit" id="leaveBtn" class="footerBtn"><img src="footer/finger.svg"
+                                                                                   class="footerImgs"
+                                                                                   onclick="leaveSession()"></button>
+                        <label for="leaveBtn">Leave</label>
+                    </div>
+                </form>
+            </div>
 
+        </div>
+    </div>
 
-		<div class="footer"></div>
-	</div>
+    <div class="chat">
+        <div class="chatHeader">
+            <div class="buttonContainer">
+                <button onclick="showMembers()" id="memberListButton">members</button>
+                <button class="clickChatHeaderButton" onclick="showChat()" id="chatButton">chat</button>
+                <button onclick="toggleChat()">[X]</button>
+            </div>
+        </div>
+        <div id="members" class="memberList" hidden>
 
-	<div class="chat">
-		<div class="chatHeader">
-			<div class="buttonContainer">
-				<button onclick="showMembers()" id="memberListButton">members</button>
-				<button class="clickChatHeaderButton" onclick="showChat()" id="chatButton">chat</button>
-				<button onclick="toggleChat()">[X]</button>
-			</div>
-		</div>
-		<div  id="members" class="memberList" hidden>
+            <div class="memberListContent">
+                <div>
+                    <p>In the room</p>
+                    <div>
+                        <span class="subUnsubBtn">....</span>
+                        <div class="subUnsubOptns">
+                            <div id="xx">Turn all cams off</div>
+                            <div id="yy">Turn all cams on</div>
+                            <div id="muteAllBtn">Turn all mics on/off</div>
+                        </div>
+                    </div>
+                </div>
 
-			<div class="memberListContent">
-				<div>
-					<p>In the room</p>
-					<div>
-						<span class="subUnsubBtn">....</span>
-						<div class="subUnsubOptns">
-							<div id="xx">Turn all cams off</div>
-							<div id="yy">Turn all cams on</div>
-							<div id="muteAllBtn">Turn all mics on/off</div>
-						</div>
-					</div>
-				</div>
+            </div>
 
-			</div>
+        </div>
 
-		</div>
+        <div id="messageBox" class="chatMessageContainer">
 
-		<div id="messageBox" class="chatMessageContainer" >
+            <!--			chat messsages-->
 
-<!--			chat messsages-->
+        </div>
+        <div id="msgForm" class="chatFooter" style="padding: 0;">
+            <form id="messengerForm" style="height: 100%;">
+                <div id="toggleEmoji" hidden=true style="height: 100%;">
+                    <div id="emojis-div">
+                        <div class="emoji-div-1">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise"
+                                   value="✋">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up"
+                                   value="👍">👍
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down"
+                                   value="👎">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋
+                        </div>
 
-		</div>
-		<div id="msgForm" class="chatFooter" style="padding: 0;">
-			<form id="messengerForm" style="height: 100%;">
-				<div id="toggleEmoji" hidden=true style="height: 100%;">
-					<div id="emojis-div">
-						<div class="emoji-div-1">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise"
-								   value="✋">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up"
-								   value="👍">👍
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down"
-								   value="👎">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋
-						</div>
-
-						<div class="emoji-div-2">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper"
-								   value="🎉">🎉
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking"
-								   value="🤔">
-							<input type="button" class="emojis"
-								   onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">
-						</div>
-					</div>
-				</div>
-				<div class="emojiBtnDiv inputContianer">
-					<input type="button" id="show-emojis" onclick="showHideEmojis()" value="emojis">
-					<input type="text" placeholder="Send a chat message..." name="msg">
-					<button type="submit">send</button>
-				</div>
-			</form>
-		</div>
-	</div>
+                        <div class="emoji-div-2">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper"
+                                   value="🎉">🎉
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking"
+                                   value="🤔">
+                            <input type="button" class="emojis"
+                                   onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">
+                        </div>
+                    </div>
+                </div>
+                <div class="emojiBtnDiv inputContianer">
+                    <input type="button" id="show-emojis" onclick="showHideEmojis()" value="emojis">
+                    <input type="text" placeholder="Send a chat message..." name="msg">
+                    <button type="submit">send</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 </body>
@@ -232,15 +303,15 @@
 <script th:inline="javascript">
 
 	// Get all the attributes from the template in Thymeleaf style
-	var sessionName = [[${ sessionName }]];
-	var token = [[${ token }]];
-	var nickName = [[${ nickName }]];
-	var userName = [[${ userName }]];
-	var myAudioEnabled = true;
-	var allAudioEnabled = true;
-	var publisher = '';
-	var subscriber = '';
-	var showEmoji = true;
+	let sessionName = [[${ sessionName }]];
+	let token = [[${ token }]];
+	let nickName = [[${ nickName }]];
+	let userName = [[${ userName }]];
+	let myAudioEnabled = true;
+	let allAudioEnabled = true;
+	let myVideoEnabled = true;
+	let screenShareEnabled = false;
+	let publisher = '';
 
 	const ov = new OpenVidu();
 	let session = ov.initSession();
@@ -278,23 +349,16 @@
 	/** audio logic starts **/
 	function muteMyself() {
 		myAudioEnabled = !myAudioEnabled;
-		if(myAudioEnabled != allAudioEnabled) {
-			allAudioEnabled = !allAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
 		}
 
-        if(myAudioEnabled == true) {
-            if(confirm("turn microphone on")){
-                publisher.publishAudio(myAudioEnabled);
-            }
-        }
-
-		publisher.publishAudio(myAudioEnabled);
-
-		var audioStatus = document.getElementById('audioStatus');
 		if(myAudioEnabled == true) {
-			audioStatus.value = "Audio unmuted";
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(myAudioEnabled);
+			}
 		} else {
-			audioStatus.value = "Audio muted";
+			publisher.publishAudio(myAudioEnabled);
 		}
 	}
 
@@ -313,28 +377,19 @@
 
 	session.on("signal:muteAll",(event)=>{
 		allAudioEnabled = !allAudioEnabled;
-		if(allAudioEnabled != myAudioEnabled) {
-			myAudioEnabled = !myAudioEnabled;
+		if(myAudioEnabled != allAudioEnabled) {
+			myAudioEnabled = allAudioEnabled;
 		}
 
-        if(allAudioEnabled == true) {
-            if(confirm("turn microphone on")){
-                publisher.publishAudio(allAudioEnabled);
-            }
-        }
-
-        publisher.publishAudio(allAudioEnabled);
-
-		var audioStatus = document.getElementById('audioStatus');
 		if(allAudioEnabled == true) {
-			audioStatus.value = "Audio unmuted";
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(allAudioEnabled);
+			}
 		} else {
-			audioStatus.value = "Audio muted";
+			publisher.publishAudio(allAudioEnabled);
 		}
 	});
 	/** audio logic ends **/
-
-
 
 
 	session.on("streamCreated",(event)=>{
@@ -724,7 +779,7 @@
 
 	/** emoji logic start**/
 	function addEmojiToChat(elem) {
-        document.getElementById("messengerForm").msg.value += elem.value;
+		document.getElementById("messengerForm").msg.value += elem.value;
 	}
 
 	function showHideEmojis() {
@@ -732,40 +787,94 @@
 	}
 	/** emoji logic end**/
 
-<!--	****ui logic****-->
+	<!--	****ui logic****-->
 
-function toggleChat(){
-    const chatBox = document.querySelector(".chat");
-    const main = document.querySelector("#main");
-    chatBox.hidden = ! chatBox.hidden;
-    main.classList.toggle("mainWithChat");
-    main.classList.toggle("mainFullWindow");
+	function toggleChat(){
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+	}
 
-}
+	function toggleMembers(){
 
-function showMembers(){
-    if(! document.querySelector("#main").classList.contains("mainWithChat")){
-        toggleChat();
-    }
-    document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
-    document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
-    document.querySelector("#messageBox").hidden = true;
-    document.querySelector("#members").hidden = false;
-    document.querySelector("#messengerForm").hidden = true;
+	}
 
-}
+	function showMembers(){
+		if(! document.querySelector("#main").classList.contains("mainWithChat")){
+			toggleChat();
+		}
+		document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#messageBox").hidden = true;
+		document.querySelector("#members").hidden = false;
+		document.querySelector("#messengerForm").hidden = true;
 
-function showChat(){
-    if(! document.querySelector("#main").classList.contains("mainWithChat")){
-        toggleChat();
-    }
-    document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
-    document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
-    document.querySelector("#messageBox").hidden = false;
-    document.querySelector("#members").hidden = true;
-    document.querySelector("#messengerForm").hidden = false;
+	}
 
-}
+	function showChat(){
+		if(! document.querySelector("#main").classList.contains("mainWithChat")){
+			toggleChat();
+		}
+		document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
+		document.querySelector("#messageBox").hidden = false;
+		document.querySelector("#members").hidden = true;
+		document.querySelector("#messengerForm").hidden = false;
+
+	}
+
+	/** footer Btn functions start*/
+	function footerAudioToggle() {
+		myAudioEnabled = !myAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
+		}
+
+		if(myAudioEnabled == true) {
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(myAudioEnabled);
+			}
+		} else {
+			publisher.publishAudio(myAudioEnabled);
+		}
+	}
+
+	function footerVideoToggle() {
+		myVideoEnabled = !myVideoEnabled;
+
+		if(myVideoEnabled == true) {
+			if(confirm("turn camera on")){
+				publisher.publishVideo(myVideoEnabled);
+			}
+		} else {
+			publisher.publishVideo(myVideoEnabled);
+		}
+	}
+
+	function footerScreenToggle() {
+		screenShareEnabled = !screenShareEnabled;
+
+		if(screenShareEnabled == true) {
+			shareScreen();
+		} else {
+			backToOldScreen(publisher);
+		}
+	}
+
+	function footerChatToggle() {
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+		document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
+		document.querySelector("#messageBox").hidden = false;
+		document.querySelector("#members").hidden = true;
+		document.querySelector("#messengerForm").hidden = false;
+	}
 
 /* dropdown logic starts */
 	//toggle between hiding and showing the dropdown content
@@ -852,7 +961,19 @@ function appendUserData(videoElement, connection) {
 		});
 	}
 
-
+	function footerPeopleToggle() {
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+		document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#messageBox").hidden = true;
+		document.querySelector("#members").hidden = false;
+		document.querySelector("#messengerForm").hidden = true;
+	}
+	/**footer Btn functions end*/
 
 </script>
 </html>
