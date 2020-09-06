@@ -1,7 +1,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
-	<title>openvidu-mvc-java</title>
+	<title th:text="${sessionName}"></title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -52,7 +52,84 @@
 	<div id="main" class="mainWithChat">
 
 
-		<div class="header"></div>
+		<div class="header">
+				<div class="room-statusbar-container">
+					<div class="room-logo">
+						<a href="/">
+							<div class="logo-wrapper">
+								<img class="logo-img" src="images/whereby-logo.png" alt="Whereby"/>
+							</div>
+						</a>
+					</div>
+					<button type="button" name="button" class="room-statusbar-button">
+						<div class="room-statusbar">
+							<div class="room-name-wrapper">
+								<span class="room-name" th:text="${sessionName}"></span>
+							</div>
+							<div class="lock-wrapper">
+								<i th:if="${locked==true}" class="fa fa-lock" style="font-size:3.5vh;color:white"></i>
+								<i th:unless="${locked==true}" class="fa fa-unlock" style="font-size:3.5vh;color:white"></i>
+								</svg>
+							</div>
+							<div class="participant-icon-wrapper">
+								<div class="participant-counter">
+									1/4
+								</div>
+								<i class="fa fa-group" style="font-size:3.5vh;color:white"></i>
+							</div>
+						</div>
+					</button>
+				</div>
+				<div class="room-extras">
+					<button type="button" class="room-pip-button" name="pip">
+						<div class="room-pip">
+							<i class="fa fa-external-link" style="font-size:3.5vh;color:white"></i>
+						</div>
+					</button>
+					<button type="button" class="room-setting-button" name="setting">
+						<div class="room-setting">
+							<i class="fa fa-gear" style="font-size:3.5vh;color:white"></i>
+						</div>
+					</button>
+					<div class="room-more-wrapper">
+						<button type="button" class="room-more-button" name="more">
+							<div class="room-more">
+								<i class="fa fa-ellipsis-h" style="font-size:3.5vh;color:white"></i>
+							</div>
+						</button>
+					</div>
+					<div class="avatar-wrapper">
+						<button type="button" class="avatar-button" name="profile" onclick="profileToggle()">
+							<div class="avatar-square">
+								<svg class="initials" viewBox="-4 -4 8 8" width="3vh" height="3.5vh">
+									<text x="0" y="0" text-anchor="middle" dominant-baseline="central"
+									font-size="2vh" th:text="${#strings.toUpperCase(#strings.substring(userName,0,1))}"></text>
+								</svg>
+							</div>
+						</button>
+						<div id="profileDropdown" class="dropdown-content">
+							<div class="menu">
+								<a href="#profile" target="_blank" class="">
+									<div class="">
+										Edit profile
+									</div>
+								</a>
+								<button type="button" name="changeName" class="">
+									<div class="">
+										Set display name
+									</div>
+								</button>
+								<div class="menu-divider"></div>
+								<button type="button" name="logout">
+									<div class="">
+										Log out
+									</div>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
 
 
 
@@ -765,6 +842,26 @@ function showChat(){
 
 }
 
+/* dropdown logic starts */
+	//toggle between hiding and showing the dropdown content
+	function profileToggle() {
+		document.getElementById("profileDropdown").classList.toggle("show");
+	}
+
+	// Close the dropdown if the user clicks outside of it
+	window.onclick = function(event) {
+		if (!event.target.matches('.avatar-button')) {
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	}
+/* dropdown logic ends */
 
 </script>
 </html>
