@@ -72,6 +72,7 @@ public class SessionController {
 				model.addAttribute("token", token);
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+				model.addAttribute("locked", true);
 
 				// Return session.html template
 				return "session";
