@@ -38,8 +38,36 @@
 		}
 
 		video{
-			width:200px
+			width:200px;
 		}
+
+		.footerBtnsDiv {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+			grid-column-gap: 2em;
+		}
+
+		.footerBtnDiv {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.footerBtn {
+			border-radius: 1em;
+			width: 4em;
+			outline: none;
+		}
+
+		.footerBtn:hover {
+			cursor: pointer;
+		}
+
+		.footerImgs {
+			width: 2em;
+			height: 3em;
+		}
+
 	</style>
 </head>
 
@@ -53,8 +81,6 @@
 
 
 		<div class="header"></div>
-
-
 
 		<div class="videoContainer">
 
@@ -86,9 +112,49 @@
 
 		</div>
 
+		<div class="footer">
+			<div class="footerBtnsDiv">
+				<div class="footerBtnDiv">
+					<button type="button" id="camBtn" class="footerBtn"><img src="footer/video-camera.svg" class="footerImgs"
+																			 onclick="footerVideoToggle()"></button>
+					<label for="camBtn">Cam</label>
+				</div>
 
+				<div class="footerBtnDiv">
+					<button type="button" id="micBtn" class="footerBtn"><img src="footer/mic.svg" class="footerImgs"
+																			 onclick="footerAudioToggle()"></button>
+					<label for="micBtn">Mic</label>
+				</div>
 
-		<div class="footer"></div>
+				<div class="footerBtnDiv">
+					<button type="button" id="shareBtn" class="footerBtn"><img src="footer/computer.svg" class="footerImgs"
+																			   onclick="footerScreenToggle()"></button>
+					<label for="shareBtn">Share</label>
+				</div>
+
+				<div class="footerBtnDiv">
+					<button type="button" id="chatBtn" class="footerBtn"><img src="footer/communication.svg" class="footerImgs"
+																			  onclick="footerChatToggle()"></button>
+					<label for="chatBtn">Chat</label>
+				</div>
+
+				<div class="footerBtnDiv">
+					<button type="button" id="peopleBtn" class="footerBtn"><img src="footer/group.svg" class="footerImgs"
+																				onclick="footerPeopleToggle()"></button>
+					<label for="peopleBtn">People</label>
+				</div>
+
+				<form action="/leave-session" method="post">
+					<input type="hidden" name="session-name" th:value="${sessionName}"></input>
+					<input type="hidden" name="token" th:value="${token}"></input>
+					<div class="footerBtnDiv">
+						<button type="submit" id="leaveBtn" class="footerBtn"><img src="footer/finger.svg" class="footerImgs" onclick="leaveSession()"></button>
+						<label for="leaveBtn">Leave</label>
+					</div>
+				</form>
+			</div>
+
+		</div>
 	</div>
 
 	<div class="chat">
@@ -120,7 +186,7 @@
 
 		<div id="messageBox" class="chatMessageContainer" >
 
-<!--			chat messsages-->
+			<!--			chat messsages-->
 
 		</div>
 		<div id="msgForm" class="chatFooter" style="padding: 0;">
@@ -174,15 +240,15 @@
 <script th:inline="javascript">
 
 	// Get all the attributes from the template in Thymeleaf style
-	var sessionName = [[${ sessionName }]];
-	var token = [[${ token }]];
-	var nickName = [[${ nickName }]];
-	var userName = [[${ userName }]];
-	var myAudioEnabled = true;
-	var allAudioEnabled = true;
-	var publisher = '';
-	var subscriber = '';
-	var showEmoji = true;
+	let sessionName = [[${ sessionName }]];
+	let token = [[${ token }]];
+	let nickName = [[${ nickName }]];
+	let userName = [[${ userName }]];
+	let myAudioEnabled = true;
+	let allAudioEnabled = true;
+	let myVideoEnabled = true;
+	let screenShareEnabled = false;
+	let publisher = '';
 
 	const ov = new OpenVidu();
 	let session = ov.initSession();
@@ -220,23 +286,16 @@
 	/** audio logic starts **/
 	function muteMyself() {
 		myAudioEnabled = !myAudioEnabled;
-		if(myAudioEnabled != allAudioEnabled) {
-			allAudioEnabled = !allAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
 		}
 
-        if(myAudioEnabled == true) {
-            if(confirm("turn microphone on")){
-                publisher.publishAudio(myAudioEnabled);
-            }
-        }
-
-		publisher.publishAudio(myAudioEnabled);
-
-		var audioStatus = document.getElementById('audioStatus');
 		if(myAudioEnabled == true) {
-			audioStatus.value = "Audio unmuted";
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(myAudioEnabled);
+			}
 		} else {
-			audioStatus.value = "Audio muted";
+			publisher.publishAudio(myAudioEnabled);
 		}
 	}
 
@@ -255,28 +314,19 @@
 
 	session.on("signal:muteAll",(event)=>{
 		allAudioEnabled = !allAudioEnabled;
-		if(allAudioEnabled != myAudioEnabled) {
-			myAudioEnabled = !myAudioEnabled;
+		if(myAudioEnabled != allAudioEnabled) {
+			myAudioEnabled = allAudioEnabled;
 		}
 
-        if(allAudioEnabled == true) {
-            if(confirm("turn microphone on")){
-                publisher.publishAudio(allAudioEnabled);
-            }
-        }
-
-        publisher.publishAudio(allAudioEnabled);
-
-		var audioStatus = document.getElementById('audioStatus');
 		if(allAudioEnabled == true) {
-			audioStatus.value = "Audio unmuted";
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(allAudioEnabled);
+			}
 		} else {
-			audioStatus.value = "Audio muted";
+			publisher.publishAudio(allAudioEnabled);
 		}
 	});
 	/** audio logic ends **/
-
-
 
 
 	session.on("streamCreated",(event)=>{
@@ -722,7 +772,7 @@
 
 	/** emoji logic start**/
 	function addEmojiToChat(elem) {
-        document.getElementById("messengerForm").msg.value += elem.value;
+		document.getElementById("messengerForm").msg.value += elem.value;
 	}
 
 	function showHideEmojis() {
@@ -730,41 +780,108 @@
 	}
 	/** emoji logic end**/
 
-<!--	****ui logic****-->
+	<!--	****ui logic****-->
 
-function toggleChat(){
-    const chatBox = document.querySelector(".chat");
-    const main = document.querySelector("#main");
-    chatBox.hidden = ! chatBox.hidden;
-    main.classList.toggle("mainWithChat");
-    main.classList.toggle("mainFullWindow");
+	function toggleChat(){
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+	}
 
-}
+	function toggleMembers(){
 
-function showMembers(){
-    if(! document.querySelector("#main").classList.contains("mainWithChat")){
-        toggleChat();
-    }
-    document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
-    document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
-    document.querySelector("#messageBox").hidden = true;
-    document.querySelector("#members").hidden = false;
-    document.querySelector("#messengerForm").hidden = true;
+	}
 
-}
+	function showMembers(){
+		if(! document.querySelector("#main").classList.contains("mainWithChat")){
+			toggleChat();
+		}
+		document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#messageBox").hidden = true;
+		document.querySelector("#members").hidden = false;
+		document.querySelector("#messengerForm").hidden = true;
 
-function showChat(){
-    if(! document.querySelector("#main").classList.contains("mainWithChat")){
-        toggleChat();
-    }
-    document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
-    document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
-    document.querySelector("#messageBox").hidden = false;
-    document.querySelector("#members").hidden = true;
-    document.querySelector("#messengerForm").hidden = false;
+	}
 
-}
+	function showChat(){
+		if(! document.querySelector("#main").classList.contains("mainWithChat")){
+			toggleChat();
+		}
+		document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
+		document.querySelector("#messageBox").hidden = false;
+		document.querySelector("#members").hidden = true;
+		document.querySelector("#messengerForm").hidden = false;
 
+	}
+
+	/** footer Btn functions start*/
+	function footerAudioToggle() {
+		myAudioEnabled = !myAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
+		}
+
+		if(myAudioEnabled == true) {
+			if(confirm("turn microphone on")){
+				publisher.publishAudio(myAudioEnabled);
+			}
+		} else {
+			publisher.publishAudio(myAudioEnabled);
+		}
+	}
+
+	function footerVideoToggle() {
+		myVideoEnabled = !myVideoEnabled;
+
+		if(myVideoEnabled == true) {
+			if(confirm("turn camera on")){
+				publisher.publishVideo(myVideoEnabled);
+			}
+		} else {
+			publisher.publishVideo(myVideoEnabled);
+		}
+	}
+
+	function footerScreenToggle() {
+		screenShareEnabled = !screenShareEnabled;
+
+		if(screenShareEnabled == true) {
+			shareScreen();
+		} else {
+			backToOldScreen(publisher);
+		}
+	}
+
+	function footerChatToggle() {
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+		document.querySelector("#memberListButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.add("clickChatHeaderButton");
+		document.querySelector("#messageBox").hidden = false;
+		document.querySelector("#members").hidden = true;
+		document.querySelector("#messengerForm").hidden = false;
+	}
+
+	function footerPeopleToggle() {
+		const chatBox = document.querySelector(".chat");
+		const main = document.querySelector("#main");
+		chatBox.hidden = ! chatBox.hidden;
+		main.classList.toggle("mainWithChat");
+		main.classList.toggle("mainFullWindow");
+		document.querySelector("#memberListButton").classList.add("clickChatHeaderButton")
+		document.querySelector("#chatButton").classList.remove("clickChatHeaderButton")
+		document.querySelector("#messageBox").hidden = true;
+		document.querySelector("#members").hidden = false;
+		document.querySelector("#messengerForm").hidden = true;
+	}
+	/**footer Btn functions end*/
 
 </script>
 </html>
