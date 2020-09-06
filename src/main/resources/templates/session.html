@@ -115,7 +115,7 @@
 				</button>
 			</div>
 			<div class="avatar-wrapper">
-				<button type="button" class="avatar-button" name="more">
+				<button type="button" class="avatar-button" name="profile" onclick="profileToggle()">
 					<div class="avatar-square">
 						<svg class="initials" viewBox="-4 -4 8 8" width="3em" height="3em">
 							<text x="0" y="0" text-anchor="middle" dominant-baseline="central"
@@ -123,6 +123,26 @@
 						</svg>
 					</div>
 				</button>
+				<div id="profileDropdown" class="dropdown-content">
+					<div class="menu">
+						<a href="#profile" target="_blank" class="">
+							<div class="">
+								Edit profile
+							</div>
+						</a>
+						<button type="button" name="changeName" class="">
+							<div class="">
+								Set display name
+							</div>
+						</button>
+						<div class="menu-divider"></div>
+						<button type="button" name="logout">
+							<div class="">
+								Log out
+							</div>
+						</button>
+				</div>
+				</div>
 			</div>
 		</header>
 	</div>
@@ -759,5 +779,26 @@
 		container.append(message);
 		document.getElementById("messageBox").append(container);
 	}
+
+	/* dropdown logic starts */
+		//toggle between hiding and showing the dropdown content
+		function profileToggle() {
+		  document.getElementById("profileDropdown").classList.toggle("show");
+		}
+
+		// Close the dropdown if the user clicks outside of it
+		window.onclick = function(event) {
+		  if (!event.target.matches('.avatar-button')) {
+		    var dropdowns = document.getElementsByClassName("dropdown-content");
+		    var i;
+		    for (i = 0; i < dropdowns.length; i++) {
+		      var openDropdown = dropdowns[i];
+		      if (openDropdown.classList.contains('show')) {
+		        openDropdown.classList.remove('show');
+		      }
+		    }
+		  }
+		}
+	/* dropdown logic ends */
 </script>
 </html>
