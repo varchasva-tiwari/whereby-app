@@ -5,6 +5,7 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<!-- Bootstrap -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -23,16 +24,46 @@
 	<script src="openvidu-browser-2.15.0.js"></script>
 
 	<style>
-		body {
-			background-color: #2d4f3d;
+		.footer {
+			margin-top: 30em;
+			width: 30em;
+			margin-left: 47em;
+		}
+
+		.footerBtnsDiv {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			background-color: white;
+		}
+
+		.footerBtnDiv {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.footerBtn {
+			border: 1px solid darkgrey;
+			border-radius: 1em;
+			margin: 18%;
+			width: 4em;
+			outline: none;
+		}
+
+		.footerBtn:hover {
+			cursor: pointer;
+		}
+
+		.footerImgs {
+			width: 2em;
+			height: 3em;
 		}
 
 		#emojis-div {
 			display: grid;
 			grid-template-rows: 50% 50%;
 			border: 1px solid white;
-			width: 100%;
-			height: 100%;
 			background-color: white;
 			border-radius: 8px;
 			padding: 5px;
@@ -44,6 +75,7 @@
 			border: 1px solid white;
 			outline: none;
 		}
+
 		.emojis:hover {
 			cursor: pointer;
 			border: 1px solid white;
@@ -54,26 +86,6 @@
 </head>
 
 <body>
-
-<nav class="navbar navbar-default">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="/">
-				<img class="demo-logo" src="images/openvidu_vert_white_bg_trans_cropped.png"/> MVC Java</a>
-			<a class="navbar-brand nav-icon"
-			   href="https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-mvc-java"
-			   title="GitHub Repository"
-			   target="_blank">
-				<i class="fa fa-github" aria-hidden="true"></i>
-			</a>
-			<a class="navbar-brand nav-icon" href="http://www.docs.openvidu.io/en/stable/tutorials/openvidu-mvc-java/"
-			   title="Documentation" target="_blank">
-				<i class="fa fa-book" aria-hidden="true"></i>
-			</a>
-		</div>
-	</div>
-</nav>
-
 
 <div class="container">
 	<div class="row justify-content-center">
@@ -98,11 +110,10 @@
 			<div id="session-header">
 				<h1 th:text="${sessionName}" id="session-title"></h1>
 				<form action="/leave-session" method="post">
-					<input type="hidden" name="session-name" th:value="${sessionName}"></input>
-					<input type="hidden" name="token" th:value="${token}"></input>
+					<input type="hidden" name="session-name" th:value="${sessionName}">
+					<input type="hidden" name="token" th:value="${token}">
 					<button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit"
-							onclick="leaveSession()">
-						Leave session
+							onclick="leaveSession()">Leave session
 					</button>
 				</form>
 			</div>
@@ -121,20 +132,9 @@
 <div class="conatiner">
 	<div class="row justify-content-center">
 		<div id="pannel" class="col-6 d-flex flex-column justify-content-start align-items-center">
-
 		</div>
 	</div>
 </div>
-
-<div style="height:100px"></div>
-<!--<footer class="footer">-->
-<!--    <div class="container">-->
-<!--        <div class="text-muted">OpenVidu © 2017</div>-->
-<!--        <a href="http://www.openvidu.io/" target="_blank">-->
-<!--            <img class="openvidu-logo" src="images/openvidu_globe_bg_transp_cropped.png"/>-->
-<!--        </a>-->
-<!--    </div>-->
-<!--</footer>-->
 
 <div class="container-fluid">
 	<div class="row justify-content-end">
@@ -148,26 +148,26 @@
 			<div id="msgForm" class="msgform col-12" style="padding: 0;">
 				<form id="messengerForm" action="/" style="height: 100%;">
 					<div class="input-group" style="height: 100%;">
-						<div id="emojis-div" style="visibility: hidden">
+						<div id="emojis-div" hidden="true">
 							<div class="emoji-div-1">
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise" value="✋">✋</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up" value="👍">👍</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down" value="👎">👎</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">👏</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">👋</button>
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('hand-raise'))" id="hand-raise" value="✋">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-up'))" id="thumbs-up" value="👍">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('thumbs-down'))" id="thumbs-down" value="👎">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('claps'))" id="claps" value="👏">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('wave'))" id="wave" value="👋">
 							</div>
 
 							<div class="emoji-div-2">
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper" value="🎉">🎉</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">😍</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">😯</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking" value="🤔">🤔</button>
-								<button class="emojis" onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">😂</button>
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('party-popper'))" id="party-popper" value="🎉">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('love'))" id="love" value="😍">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('shock'))" id="shock" value="😯">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('thinking'))" id="thinking" value="🤔">
+								<input type="button" class="emojis" onclick="addEmojiToChat(document.getElementById('laugh'))" id="laugh" value="😂">
 							</div>
 						</div>
 
 						<div class="input-group-prepend emojiBtnDiv">
-							<button id="show-emojis" onclick="showHideEmojis()">emojis</button>
+							<input type="button" id="show-emojis" onclick="showHideEmojis()" value="emojis">
 						</div>
 
 						<input type="text" class="form-control" placeholder="Send a chat message..." aria-label=""
@@ -179,6 +179,46 @@
 					</div>
 				</form>
 			</div>
+		</div>
+	</div>
+	<div class="footer justify-content-center">
+		<div class="footerBtnsDiv">
+			<div class="footerBtnDiv">
+				<button type="button" id="camBtn" class="footerBtn"><img src="footer/video-camera.svg" class="footerImgs" onclick="footerVideoToggle()"></button>
+				<label for="camBtn">Cam</label>
+			</div>
+
+			<div class="footerBtnDiv">
+				<button type="button" id="micBtn" class="footerBtn"><img src="footer/mic.svg" class="footerImgs" onclick="footerAudioToggle()"></button>
+				<label for="micBtn">Mic</label>
+			</div>
+
+			<div class="footerBtnDiv">
+				<button type="button" id="shareBtn" class="footerBtn"><img src="footer/computer.svg" class="footerImgs" onclick="footerShareScreenToggle()"></button>
+				<label for="shareBtn">Share</label>
+			</div>
+
+			<div class="footerBtnDiv">
+				<button type="button" id="chatBtn" class="footerBtn"><img src="footer/communication.svg" class="footerImgs"></button>
+				<label for="chatBtn">Chat</label>
+			</div>
+
+			<div class="footerBtnDiv">
+				<button type="button" id="peopleBtn" class="footerBtn"><img src="footer/group.svg" class="footerImgs"></button>
+				<label for="peopleBtn">People</label>
+			</div>
+
+
+            <form action="/leave-session" method="post">
+                <input type="hidden" name="session-name" th:value="${sessionName}">
+                <input type="hidden" name="token" th:value="${token}">
+                <div class="footerBtnDiv">
+                    <button id="leaveBtn" class="footerBtn" type="submit" onclick="leaveSession()">
+                        <img src="footer/finger.svg" class="footerImgs">
+                    </button>
+                    <label for="leaveBtn">Leave</label>
+                </div>
+            </form>
 		</div>
 	</div>
 </div>
@@ -195,6 +235,9 @@
 	var userName = [[${ userName }]];
 	var myAudioEnabled = true;
 	var allAudioEnabled = true;
+	var myVideoEnabled = true;
+	var screenShared = false;
+
 	var publisher = '';
 	var subscriber = '';
 	var showEmoji = true;
@@ -213,7 +256,7 @@
 					publishAudio:myAudioEnabled,
 					publishVideo:true,
 					resolution:'640x480',
-					framRate:30,
+					frameRate:30,
 					insertMode:'APPEND',
 					mirror:true
 				})
@@ -235,8 +278,8 @@
 	/** audio logic starts **/
 	function muteMyself() {
 		myAudioEnabled = !myAudioEnabled;
-		if(myAudioEnabled != allAudioEnabled) {
-			allAudioEnabled = !allAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
 		}
 
         if(myAudioEnabled == true) {
@@ -270,17 +313,17 @@
 
 	session.on("signal:muteAll",(event)=>{
 		allAudioEnabled = !allAudioEnabled;
-		if(allAudioEnabled != myAudioEnabled) {
-			myAudioEnabled = !myAudioEnabled;
+		if(myAudioEnabled != allAudioEnabled) {
+			myAudioEnabled = allAudioEnabled;
 		}
 
         if(allAudioEnabled == true) {
             if(confirm("turn microphone on")){
                 publisher.publishAudio(allAudioEnabled);
             }
-        }
-
-        publisher.publishAudio(allAudioEnabled);
+        } else{
+			publisher.publishAudio(allAudioEnabled);
+		}
 
 		var audioStatus = document.getElementById('audioStatus');
 		if(allAudioEnabled == true) {
@@ -290,23 +333,6 @@
 		}
 	});
 	/** audio logic ends **/
-
-
-	/** emoji logic start**/
-	function addEmojiToChat(elem) {
-        document.getElementById("messengerForm").msg.value += elem.value;
-	}
-
-	function showHideEmojis() {
-		showEmoji = !showEmoji;
-
-		if(showEmoji === true) {
-			document.getElementById("emojis-div").style.visibility = 'hidden';
-		} else {
-			document.getElementById("emojis-div").style.visibility = 'visible';
-		}
-	}
-	/** emoji logic end**/
 
 	session.on("streamCreated",(event)=>{
 		let subscriber = session.subscribe(event.stream,"video-container");
@@ -687,5 +713,60 @@
 		container.append(message);
 		document.getElementById("messageBox").append(container);
 	}
+
+	/** emoji logic start**/
+	function addEmojiToChat(elem) {
+		document.getElementById("messengerForm").msg.value += elem.value;
+	}
+
+	function showHideEmojis() {
+		document.getElementById("emojis-div").hidden = !document.getElementById("emojis-div").hidden;
+	}
+	/** emoji logic end**/
+
+	/**footer Btns functionality start**/
+	function footerVideoToggle() {
+		myVideoEnabled = !myVideoEnabled;
+		if(myVideoEnabled == true) {
+			if(confirm("Allow to turn on camera?")){
+				publisher.publishVideo(myVideoEnabled);
+			}
+		} else{
+			publisher.publishVideo(myVideoEnabled);
+		}
+	}
+
+	function footerAudioToggle() {
+		myAudioEnabled = !myAudioEnabled;
+		if(allAudioEnabled != myAudioEnabled) {
+			allAudioEnabled = myAudioEnabled;
+		}
+
+		if(myAudioEnabled == true) {
+			if(confirm("Allow to turn on microphone?")){
+				publisher.publishAudio(myAudioEnabled);
+			}
+		} else{
+			publisher.publishAudio(myAudioEnabled);
+		}
+
+		var audioStatus = document.getElementById('audioStatus');
+		if(myAudioEnabled == true) {
+			audioStatus.value = "Audio unmuted";
+		} else {
+			audioStatus.value = "Audio muted";
+		}
+	}
+
+	function footerShareScreenToggle() {
+		screenShared = !screenShared;
+		if(screenShared == true) {
+			shareScreen();
+		} else {
+			backToOldScreen(publisher);
+		}
+	}
+	/**footer Btns functionality ends**/
+
 </script>
 </html>
