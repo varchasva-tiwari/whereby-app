@@ -40,8 +40,11 @@ html{
 .videoContainer{
     grid-column: 1/-1;
 }
-.footer{
+.footer {
     grid-column: 1/-1;
+    position: fixed;
+    top: 33.5em;
+    left: 10em;
 }
 
 .chat > div{
