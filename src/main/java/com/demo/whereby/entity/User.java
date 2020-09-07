@@ -1,0 +1,134 @@
+package com.demo.whereby.entity;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.net.URL;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "name", nullable = false)
+    @NotBlank
+    private String name;
+
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "email", nullable = false)
+    @Email
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
+    private String password;
+
+    @Column(name = "profile_pic_URL")
+    private URL profilePicURL;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "active")
+    private boolean active;
+
+    @OneToMany(mappedBy = "user")
+    private List<Room> rooms;
+
+    public User() {
+    }
+
+    public User(@NotBlank String name, String nickname, @Email String email, @NotBlank String password, URL profilePicURL, String role, Date createdAt, boolean active, List<Room> rooms) {
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.profilePicURL = profilePicURL;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.active = active;
+        this.rooms = rooms;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public URL getProfilePicURL() {
+        return profilePicURL;
+    }
+
+    public void setProfilePicURL(URL profilePicURL) {
+        this.profilePicURL = profilePicURL;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+}

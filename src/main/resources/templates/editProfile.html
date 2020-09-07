@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="'User Profile'"></title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            border: 3px solid black;
+            width: 79em;
+            height: 4em;
+        }
+
+        .profile{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 3px solid green;
+            width: auto;
+            height: auto;
+        }
+
+        .profileHeader {
+            border: 1px solid red;
+            display: flex;
+            justify-content: center;
+            width: 60em;
+            height: 4em;
+            margin: 3em;
+        }
+
+        .profileBody {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            border: 3px solid blue;
+            width: 60em;
+            height: 25em;
+            margin: 3em;
+        }
+
+        .profileBodyLeft {
+            display: grid;
+            grid-template-rows: 80% 20%;
+            justify-content: center;
+            border: 3px solid red;
+            width: auto;
+            height: auto;
+            padding: 2em;
+        }
+
+        .profilePic {
+            border: 3px solid black;
+            width: 15em;
+            height: 15em;
+        }
+
+        .profilePicOptions {
+            display: flex;
+            justify-content: space-around;
+            border: 3px solid gray;
+            width: auto;
+            height: auto;
+        }
+
+        .imgBtn {
+            border-radius: 0.8em;
+            font-size: 1em;
+            height: 3.4em;
+            outline: none;
+        }
+
+        .imgBtn:hover {
+            cursor: pointer;
+        }
+
+        #editImgBtn {
+            border: 1px solid #2E8B57;
+            width: 8em;
+            background-color: #2E8B57;
+            color: white;
+        }
+
+        #resetImgBtn {
+            border: 1px solid #c7473c;
+            width: 5em;
+            background-color: white;
+            color: #c7473c;
+        }
+
+        #deleteAccountBtn {
+            border: 1px solid #c7473c;
+            background-color: #c7473c;
+            color: white;
+        }
+
+        .profileBodyRight {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 3px solid green;
+            width: auto;
+            height: 15em;
+        }
+
+        .profileInputText {
+            font-size: 1.3em;
+        }
+
+        .profileInputBox {
+            border: 1px solid gray;
+            border-radius: 0.8em;
+            width: 25em;
+            height: 3.1em;
+            outline: none;
+        }
+
+        .deleteAccountDiv {
+            border: 3px solid turquoise;
+            width: 60em;
+            height: auto;
+            margin: 3em;
+        }
+
+        .footer {
+            border: 3px solid yellow;
+            width: 79em;
+            height: 4em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"></div>
+
+    <div class="profile">
+        <div class="profileHeader">
+            <h1>Profile</h1>
+        </div>
+
+        <div class="profileBody">
+            <div class="profileBodyLeft">
+                <div class="profilePic">
+                </div>
+                <div class="profilePicOptions">
+                    <button id="editImgBtn" class="imgBtn">Edit Image</button>
+                    <button id="resetImgBtn" class="imgBtn">Reset</button>
+                </div>
+            </div>
+            <div class="profileBodyRight">
+                <table>
+                    <tr>
+                        <td class="profileInputText">Name</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="profileInputBox"></td>
+                    </tr>
+                    <tr>
+                        <td class="profileInputText">Email</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="profileInputBox"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="deleteAccountDiv">
+            <h1>Delete Account</h1>
+            <p>By deleting your account, you will be losing your account data and personal rooms. Once you delete your account, this information cannot be recovered.</p>
+            <button id="deleteAccountBtn" class="imgBtn">Delete your account</button>
+        </div>
+    </div>
+
+    <div class="footer"></div>
+</div>
+</body>
+</html>
