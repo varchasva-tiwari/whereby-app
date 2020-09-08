@@ -17,11 +17,15 @@
 			display: grid;
 			grid-template-rows: 50% 50%;
 			border: 1px solid white;
-			width: 50px;
-			height: 30px;
+<!--			width: 50px;-->
+<!--			height: 30px;-->
 			background-color: lightgrey;
 			border-radius: 8px;
 			padding: 3px;
+			position: absolute;
+            width: 276px;
+            top: 75%;
+            height: 10%;
 		}
 
 		.emojis {
@@ -254,7 +258,7 @@
         </div>
         <div id="msgForm" class="chatFooter" style="padding: 0;">
             <form id="messengerForm" style="height: 100%;">
-                <div id="toggleEmoji" hidden=true style="height: 100%;">
+                <div id="toggleEmoji" hidden=true >
                     <div id="emojis-div">
                         <div class="emoji-div-1">
                             <input type="button" class="emojis"
@@ -404,7 +408,7 @@
 
 	session.on("streamDestroyed",(event)=>{
 		console.log("stream destroyed.....")
-		document.getElementById("pannel").querySelector("#"+event.stream.connection.connectionId+"-1").closest("div").remove();
+		document.querySelector(".memberListContent").querySelector("#"+"container-"+event.stream.connection.connectionId).remove();
 		// Delete the HTML element with the user's name and nickname
 		removeUserData(event.stream.connection);
 	});
@@ -458,6 +462,7 @@
 
 	function addPannel(container,stream){
 		const div = createElements("div");
+		div.id = "container-"+stream.connection.connectionId;
 		const name = createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
 
 		const videoOnOffToggle = createElements("div",null,null,"<i class='fa fa-video-camera' aria-hidden='false'></i>")
@@ -926,8 +931,6 @@ function appendUserData(videoElement, connection) {
 		videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
 		addClickListener(videoElement, clientData, serverData);
 	}
-
-
 
 	function removeUserData(connection) {
 		var userNameRemoved = $("#data-" + connection.connectionId);
