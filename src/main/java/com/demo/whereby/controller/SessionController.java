@@ -25,12 +25,14 @@ public class SessionController {
 	// Collection to pair session names and tokens (the inner Map pairs tokens and role associated)
 	private Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
 	// Collection to pair session names and creation time
-    private Map<String, Date> mapSessionTime = new ConcurrentHashMap<>();
+    private Map<String, Long> mapSessionTime = new ConcurrentHashMap<String, Long>();
 
 	// URL where our OpenVidu server is listening
 	private String OPENVIDU_URL;
 	// Secret shared with our OpenVidu server
 	private String SECRET;
+	// Default Room Status
+	private final boolean ROOM_STATUS = false;
 
 	public SessionController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
 		this.SECRET = secret;
@@ -75,7 +77,8 @@ public class SessionController {
 				model.addAttribute("token", token);
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
-				model.addAttribute("locked", true);
+				model.addAttribute("locked", ROOM_STATUS);
+				model.addAttribute("startTime",mapSessionTime.get(sessionName));
 
 				// Return session.html template
 				return "session";
@@ -100,16 +103,21 @@ public class SessionController {
 				// Generate a new token with the recently created tokenOptions
 				String token = session.generateToken(tokenOptions);
 
+				Date date = new Date();
+
 				// Store the session and the token in our collections
 				this.mapSessions.put(sessionName, session);
 				this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
 				this.mapSessionNamesTokens.get(sessionName).put(token, role);
+				this.mapSessionTime.put(sessionName,date.getTime());
 
 				// Add all the needed attributes to the template
 				model.addAttribute("sessionName", sessionName);
 				model.addAttribute("token", token);
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+				model.addAttribute("locked", ROOM_STATUS);
+				model.addAttribute("startTime",mapSessionTime.get(sessionName));
 
 				// Return session.html template
 				return "session";

@@ -307,6 +307,7 @@
 	let token = [[${ token }]];
 	let nickName = [[${ nickName }]];
 	let userName = [[${ userName }]];
+	let startTime = [[${ startTime }]];
 	let myAudioEnabled = true;
 	let allAudioEnabled = true;
 	let myVideoEnabled = true;
@@ -983,6 +984,13 @@ function appendUserData(videoElement, connection) {
 	   document.querySelector(".participant-counter").innerText = session.streamManagers.length;
 	}
 	/** update member count ends **/
+
+	/** show timer starts **/
+	function showTimer(){
+		var d = new Date();
+  		var n = d.getTime();
+	}
+	/** show timer ends **/
 
 </script>
 </html>
