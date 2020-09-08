@@ -1,6 +1,6 @@
 package com.demo.whereby.entity;
 
-import javax.persistence.*;
+/*import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.net.URL;
@@ -131,4 +131,4 @@ public class User {
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
-}
+}*/

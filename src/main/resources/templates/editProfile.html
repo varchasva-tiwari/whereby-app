@@ -10,7 +10,6 @@
         }
 
         .header {
-            border: 3px solid black;
             width: 79em;
             height: 4em;
         }
@@ -19,13 +18,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 3px solid green;
             width: auto;
             height: auto;
         }
 
         .profileHeader {
-            border: 1px solid red;
             display: flex;
             justify-content: center;
             width: 60em;
@@ -36,17 +33,17 @@
         .profileBody {
             display: grid;
             grid-template-columns: 40% 60%;
-            border: 3px solid blue;
+            border: 3px solid gray;
             width: 60em;
             height: 25em;
             margin: 3em;
+            padding: 1em;
         }
 
         .profileBodyLeft {
             display: grid;
             grid-template-rows: 80% 20%;
             justify-content: center;
-            border: 3px solid red;
             width: auto;
             height: auto;
             padding: 2em;
@@ -61,7 +58,6 @@
         .profilePicOptions {
             display: flex;
             justify-content: space-around;
-            border: 3px solid gray;
             width: auto;
             height: auto;
         }
@@ -73,7 +69,23 @@
             outline: none;
         }
 
-        .imgBtn:hover {
+        .editImgBtnWrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .editImgBtnWrapper input[type=file] {
+            border: 1px solid black;
+            position: absolute;
+            left: 0;
+            top: 0.5em;
+            opacity: 0;
+            width: 8em;
+            height: 3.4em;
+        }
+
+        .editImgBtnWrapper input[type=file]:hover {
             cursor: pointer;
         }
 
@@ -99,11 +111,11 @@
 
         .profileBodyRight {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 3px solid green;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
             width: auto;
-            height: 15em;
+            height: auto;
         }
 
         .profileInputText {
@@ -118,15 +130,31 @@
             outline: none;
         }
 
+        #profileForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #updateProfileBtn {
+            margin-top: 2em;
+            border: 1px solid gray;
+            background-color: white;
+        }
+
+        #updateProfileBtn:hover {
+            cursor: pointer;
+        }
+
         .deleteAccountDiv {
-            border: 3px solid turquoise;
+            border: 3px solid gray;
             width: 60em;
-            height: auto;
+            height: 13em;
             margin: 3em;
+            padding: 1em;
         }
 
         .footer {
-            border: 3px solid yellow;
             width: 79em;
             height: 4em;
         }
@@ -146,25 +174,45 @@
                 <div class="profilePic">
                 </div>
                 <div class="profilePicOptions">
-                    <button id="editImgBtn" class="imgBtn">Edit Image</button>
-                    <button id="resetImgBtn" class="imgBtn">Reset</button>
+                    <div class="editImgBtnWrapper">
+                        <button id="editImgBtn" class="imgBtn">Edit Image</button>
+                        <input type="file" name="imgFile">
+                    </div>
+
+                    <!--<button id="resetImgBtn" class="imgBtn">Reset</button>-->
                 </div>
             </div>
             <div class="profileBodyRight">
-                <table>
-                    <tr>
-                        <td class="profileInputText">Name</td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" class="profileInputBox"></td>
-                    </tr>
-                    <tr>
-                        <td class="profileInputText">Email</td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" class="profileInputBox"></td>
-                    </tr>
-                </table>
+                <form id="profileForm" th:action="@{/editProfile}" th:object="${userObj}" method="post">
+                    <table>
+                        <tr>
+                            <td class="profileInputText">Name</td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="profileInputBox" th:field="${userObj.name}"></td>
+                        </tr>
+                        <tr>
+                            <td class="profileInputText">Nickname</td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="profileInputBox" th:field="${userObj.nickname}"></td>
+                        </tr>
+                        <tr>
+                            <td class="profileInputText">Email</td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="profileInputBox" th:field="${userObj.email}"></td>
+                        </tr>
+                        <tr>
+                            <td class="profileInputText">Password</td>
+                        </tr>
+                        <tr>
+                            <td><input type="password" class="profileInputBox" th:field="${userObj.password}"></td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="imgBtn" id="updateProfileBtn" hidden="true">Update Changes</button>
+                </form>
+
             </div>
         </div>
 
@@ -177,5 +225,13 @@
 
     <div class="footer"></div>
 </div>
+
+<script>
+    document.querySelectorAll(".profileInputBox").forEach(item => {
+        item.addEventListener("focus", () => {
+            document.getElementById("updateProfileBtn").hidden = false;
+        })
+    })
+</script>
 </body>
 </html>

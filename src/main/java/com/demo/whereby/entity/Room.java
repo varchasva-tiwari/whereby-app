@@ -1,6 +1,6 @@
 package com.demo.whereby.entity;
 
-import javax.persistence.*;
+/*import javax.persistence.*;
 
 @Entity
 @Table(name = "rooms")
@@ -22,5 +22,5 @@ public class Room {
     public Room(String name) {
         this.name = name;
     }
-}
+}*/
 
