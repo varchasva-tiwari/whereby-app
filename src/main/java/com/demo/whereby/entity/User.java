@@ -1,10 +1,10 @@
 package com.demo.whereby.entity;
 
-/*import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.*;
 import java.net.URL;
 import java.util.Date;
+import io.openvidu.java.client.OpenViduRole;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,22 +12,20 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     private int id;
 
     @Column(name = "name", nullable = false)
-    @NotBlank
     private String name;
 
     @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "email", nullable = false)
-    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
-    @NotBlank
     private String password;
 
     @Column(name = "profile_pic_URL")
@@ -46,18 +44,6 @@ public class User {
     private List<Room> rooms;
 
     public User() {
-    }
-
-    public User(@NotBlank String name, String nickname, @Email String email, @NotBlank String password, URL profilePicURL, String role, Date createdAt, boolean active, List<Room> rooms) {
-        this.name = name;
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-        this.profilePicURL = profilePicURL;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.active = active;
-        this.rooms = rooms;
     }
 
     public String getName() {
@@ -125,10 +111,10 @@ public class User {
     }
 
     public List<Room> getRooms() {
-        return rooms;
+        return new ArrayList<Room>(this.rooms);
     }
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
+    public void setRooms(Room room) {
+        this.rooms.add(room);
     }
-}*/
+}

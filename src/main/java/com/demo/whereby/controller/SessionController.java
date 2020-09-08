@@ -5,7 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import com.demo.whereby.entity.User;
+import com.demo.whereby.service.interfaces.UserService;
 import io.openvidu.java.client.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SessionController {
+
+	@Autowired
+	private UserService userService;
 
 	// OpenVidu object as entrypoint of the SDK
 	private OpenVidu openVidu;
@@ -47,7 +53,11 @@ public class SessionController {
 		System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
 
 		// Role associated to this user
-		OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
+		User user = userService.findByEmail(httpSession.getAttribute("loggedUser").toString());
+		OpenViduRole role = null;
+		if(user.getRole().equals("publisher")){
+			role = OpenViduRole.PUBLISHER;
+		}
 
 		// Optional data to be passed to other users when this user connects to the video-call
 		// In this case, a JSON with the value we stored in the HttpSession object on login
