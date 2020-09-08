@@ -106,6 +106,9 @@
                         </div>
                     </div>
                 </button>
+				<div id="timer" hidden>
+					<label id="hours">00</label>:<label id="minutes">00</label>:<label id="seconds">00</label>
+				</div>
             </div>
             <div class="room-extras">
                 <button type="button" class="room-pip-button" name="pip">
@@ -119,9 +122,9 @@
                     </div>
                 </button>
                 <div class="room-more-wrapper">
-                    <button type="button" class="room-more-button" name="more">
+                    <button type="button" class="room-more-button" name="more" onclick="showTimer()">
                         <div class="room-more">
-                            <i class="fa fa-ellipsis-h" style="font-size:3.5vh;color:white"></i>
+                            <i class="fa fa-clock-o" style="font-size:3.5vh;color:white"></i>
                         </div>
                     </button>
                 </div>
@@ -135,7 +138,7 @@
                             </svg>
                         </div>
                     </button>
-                    <div id="profileDropdown" class="dropdown-content">
+                    <div id="profileDropdown" class="dropdown-content" hidden>
                         <div class="menu">
                             <a href="#profile" target="_blank" class="">
                                 <div class="">
@@ -314,6 +317,13 @@
 	let screenShareEnabled = false;
 	let publisher = '';
 
+	let memberCount = 0;
+
+	let hoursLabel = document.getElementById("hour");
+	let minutesLabel = document.getElementById("minutes");
+	let secondsLabel = document.getElementById("seconds");
+	let totalSeconds = 0;
+
 	const ov = new OpenVidu();
 	let session = ov.initSession();
 
@@ -334,7 +344,7 @@
 				})
 				publisher.on("videoElementCreated",(event)=>{
 					addPannel(document.querySelector(".memberListContent"),publisher.stream);
-					updateMemberCount();
+					updateMemberCount(++memberCount);
 					// Init the main video with ours and append our data
 					var userData = {
 						nickName: nickName,
@@ -344,6 +354,10 @@
 					appendUserData(event.element, userData);
 				})
 				session.publish(publisher);
+				// starting timer
+				let d = new Date();
+				totalSeconds = Math.round((d.getTime() - startTime)/1000);
+				setInterval(setTime, 1000);
 			})
 			.catch()
 
@@ -398,18 +412,18 @@
 		console.log("joined....")
 		subscriber.on("videoElementCreated",(subEvent)=>{
 			addPannel(document.querySelector(".memberListContent"),event.stream);
-			updateMemberCount();
 			// Add a new HTML element for the user's name and nickname over its video
 			appendUserData(subEvent.element, subscriber.stream.connection);
+			updateMemberCount(++memberCount);
 		})
 	});
 
 	session.on("streamDestroyed",(event)=>{
 		console.log("stream destroyed.....")
-		updateMemberCount();
 		document.querySelector(".memberListContent").querySelector("#"+"container-"+event.stream.connection.connectionId).remove();
 		// Delete the HTML element with the user's name and nickname
 		removeUserData(event.stream.connection);
+		updateMemberCount(--memberCount);
 	});
 
 	function leaveSession() {
@@ -981,15 +995,37 @@ function appendUserData(videoElement, connection) {
 	/**footer Btn functions end*/
 
 	/** update member count starts **/
-	function updateMemberCount(){
-	   document.querySelector(".participant-counter").innerText = session.streamManagers.length;
+	function updateMemberCount(count){
+		console.log("updateMemberCount called...")
+	   document.querySelector(".participant-counter").innerText = count;
 	}
 	/** update member count ends **/
 
 	/** show timer starts **/
 	function showTimer(){
-		var d = new Date();
-  		var n = d.getTime();
+		// toggle timer
+		if(!document.getElementById("timer").hidden){
+			document.getElementById("timer").hidden=true;
+		}else{
+			document.getElementById("timer").hidden=false;
+		}
+	}
+	function setTime() {
+
+  		++totalSeconds;
+  		secondsLabel.innerHTML = pad(totalSeconds % 60);
+  		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+		hoursLabel.innerHTML = pad(parseInt(totalSeconds / 3600));
+	}
+
+	function pad(val) {
+		var valString = val + "";
+		if (valString.length < 2) {
+			return "0" + valString;
+		} else {
+			return valString;
+		}
 	}
 	/** show timer ends **/
 
