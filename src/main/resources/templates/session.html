@@ -459,7 +459,8 @@
 	function addPannel(container,stream){
 		const div = createElements("div");
 		div.id = "container-"+stream.connection.connectionId;
-		const name = connection.nickName ? connection.nickName : createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
+		const name = stream.connection.nickName ? stream.connection.nickName : createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
+
 
 		const videoOnOffToggle = createElements("div",null,null,"<i class='fa fa-video-camera' aria-hidden='false'></i>")
 		const audioOnOffToggle = createElements("div",null,null,"<i class='fa fa-microphone-slash'></i>")
@@ -735,7 +736,7 @@
 		const signal = {
 			data:JSON.stringify({
 				message : text,
-				from : userName
+				from : nickName
 			}),
 			type:"chatMessage"
 		}
