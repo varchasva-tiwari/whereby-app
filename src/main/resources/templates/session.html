@@ -319,7 +319,7 @@
 
 	let memberCount = 0;
 
-	let hoursLabel = document.getElementById("hour");
+	let hoursLabel = document.getElementById("hours");
 	let minutesLabel = document.getElementById("minutes");
 	let secondsLabel = document.getElementById("seconds");
 	let totalSeconds = 0;
@@ -1015,7 +1015,6 @@ function appendUserData(videoElement, connection) {
   		++totalSeconds;
   		secondsLabel.innerHTML = pad(totalSeconds % 60);
   		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-		minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
 		hoursLabel.innerHTML = pad(parseInt(totalSeconds / 3600));
 	}
 
