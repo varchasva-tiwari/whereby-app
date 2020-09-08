@@ -100,7 +100,7 @@
                         </div>
                         <div class="participant-icon-wrapper">
                             <div class="participant-counter">
-                                1/4
+                                0
                             </div>
                             <i class="fa fa-group" style="font-size:3.5vh;color:white"></i>
                         </div>
@@ -333,7 +333,7 @@
 				})
 				publisher.on("videoElementCreated",(event)=>{
 					addPannel(document.querySelector(".memberListContent"),publisher.stream);
-
+					updateMemberCount();
 					// Init the main video with ours and append our data
 					var userData = {
 						nickName: nickName,
@@ -397,6 +397,7 @@
 		console.log("joined....")
 		subscriber.on("videoElementCreated",(subEvent)=>{
 			addPannel(document.querySelector(".memberListContent"),event.stream);
+			updateMemberCount();
 			// Add a new HTML element for the user's name and nickname over its video
 			appendUserData(subEvent.element, subscriber.stream.connection);
 		})
@@ -404,6 +405,7 @@
 
 	session.on("streamDestroyed",(event)=>{
 		console.log("stream destroyed.....")
+		updateMemberCount();
 		document.getElementById("pannel").querySelector("#"+event.stream.connection.connectionId+"-1").closest("div").remove();
 		// Delete the HTML element with the user's name and nickname
 		removeUserData(event.stream.connection);
@@ -974,6 +976,12 @@ function appendUserData(videoElement, connection) {
 		document.querySelector("#messengerForm").hidden = true;
 	}
 	/**footer Btn functions end*/
+
+	/** update member count starts **/
+	function updateMemberCount(){
+	   document.querySelector(".participant-counter").innerText = session.streamManagers.length;
+	}
+	/** update member count ends **/
 
 </script>
 </html>

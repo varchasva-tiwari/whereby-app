@@ -1,5 +1,6 @@
 package com.demo.whereby.controller;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +24,8 @@ public class SessionController {
 	private Map<String, Session> mapSessions = new ConcurrentHashMap<>();
 	// Collection to pair session names and tokens (the inner Map pairs tokens and role associated)
 	private Map<String, Map<String, OpenViduRole>> mapSessionNamesTokens = new ConcurrentHashMap<>();
+	// Collection to pair session names and creation time
+    private Map<String, Date> mapSessionTime = new ConcurrentHashMap<>();
 
 	// URL where our OpenVidu server is listening
 	private String OPENVIDU_URL;
