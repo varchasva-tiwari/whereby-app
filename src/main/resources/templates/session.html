@@ -404,7 +404,7 @@
 
 	session.on("streamDestroyed",(event)=>{
 		console.log("stream destroyed.....")
-		document.getElementById("pannel").querySelector("#"+event.stream.connection.connectionId+"-1").closest("div").remove();
+		document.querySelector(".memberListContent").querySelector("#"+"container-"+event.stream.connection.connectionId).remove();
 		// Delete the HTML element with the user's name and nickname
 		removeUserData(event.stream.connection);
 	});
@@ -458,7 +458,8 @@
 
 	function addPannel(container,stream){
 		const div = createElements("div");
-		const name = createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
+		div.id = "container-"+stream.connection.connectionId;
+		const name = connection.nickName ? connection.nickName : createElements("p",null,JSON.parse(stream.connection.data.split("%/%")[0]).clientData);
 
 		const videoOnOffToggle = createElements("div",null,null,"<i class='fa fa-video-camera' aria-hidden='false'></i>")
 		const audioOnOffToggle = createElements("div",null,null,"<i class='fa fa-microphone-slash'></i>")
