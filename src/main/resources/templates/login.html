@@ -52,18 +52,18 @@
     <form th:action="@{/login}" method="post">
         <div th:if="${param.error}">
             <div class="alert-danger">
-                incorrect user name or password
+                Incorrect username or password!
             </div>
         </div>
         <div th:if="${param.logout}">
             <div class="alert-success">
-                you have been loged out
+                You have been logged out!
             </div>
         </div>
              <input  type="text" id="username" name="username" placeholder="enter your email here">
              <input type="password" placeholder="enter your password" id="password" name="password">
              <input  type="submit" id="login-submit" value="Log in">
-             <span>new user? <a th:href="@{/registration}">register here</a> </span>
+             <span>New User? <a th:href="@{/registration}">Register Here</a> </span>
     </form>
 
 </body>

@@ -41,9 +41,17 @@ public class User {
     private boolean active;
 
     @OneToMany(mappedBy = "user")
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
     public User() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

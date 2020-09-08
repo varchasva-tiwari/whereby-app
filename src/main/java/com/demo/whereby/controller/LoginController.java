@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Controller
 public class LoginController {
@@ -22,8 +24,10 @@ public class LoginController {
     //    public static Map<String, MyUser> users = new ConcurrentHashMap<>();
     @Autowired
     private UserService userService;
+
     @Autowired
     private RoomService roomService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -98,6 +102,9 @@ public class LoginController {
         user.setPassword(passwordEncoder.encode(registrationModel.getPassword()));
         user.setRole(registrationModel.getRole());
         user.setRooms(room);
+        user.setCreatedAt(new Date());
+        user.setActive(true);
+
         userService.save(user);
         roomService.save(room);
 

@@ -106,6 +106,12 @@
                     </div>
                 </button>
             </div>
+            <div>
+                <form th:action="@{/editProfile}" method="get">
+                    <input type="hidden" name="userId" th:value="${currentUserId}">
+                    <input type="submit" value="Edit profile">
+                </form>
+            </div>
             <div class="room-extras">
                 <button type="button" class="room-pip-button" name="pip">
                     <div class="room-pip">
@@ -136,11 +142,6 @@
                     </button>
                     <div id="profileDropdown" class="dropdown-content">
                         <div class="menu">
-                            <a href="#profile" target="_blank" class="">
-                                <div class="">
-                                    Edit profile
-                                </div>
-                            </a>
                             <button type="button" name="changeName" class="">
                                 <div class="">
                                     Set display name
@@ -157,7 +158,6 @@
                 </div>
             </div>
         </div>
-
 
         <div id="main-container" class="videoContainer">
             <div class="oneVideo" id="main-video">
@@ -326,7 +326,7 @@
 					publishAudio:myAudioEnabled,
 					publishVideo:true,
 					resolution:'640x480',
-					framRate:30,
+					frameRate:30,
 					insertMode:'APPEND',
 					mirror:true
 				})

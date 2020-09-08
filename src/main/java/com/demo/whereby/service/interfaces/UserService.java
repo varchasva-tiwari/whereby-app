@@ -8,4 +8,10 @@ public interface UserService extends UserDetailsService {
     com.demo.whereby.entity.User save(com.demo.whereby.entity.User user);
 
     User findByEmail(String loggedUser);
+
+    User edit(User user);
+
+    User findById(int currentUserId);
+
+    void deleteById(int userId);
 }

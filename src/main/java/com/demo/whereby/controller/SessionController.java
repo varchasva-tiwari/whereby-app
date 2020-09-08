@@ -78,11 +78,14 @@ public class SessionController {
 				this.mapSessionNamesTokens.get(sessionName).put(token, role);
 
 				// Add all the needed attributes to the template
+
 				model.addAttribute("sessionName", sessionName);
 				model.addAttribute("token", token);
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 				model.addAttribute("locked", true);
+
+				model.addAttribute("currentUserId", user.getId());
 
 				// Return session.html template
 				return "session";
@@ -117,6 +120,8 @@ public class SessionController {
 				model.addAttribute("token", token);
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
+
+				model.addAttribute("currentUserId", user.getId());
 
 				// Return session.html template
 				return "session";

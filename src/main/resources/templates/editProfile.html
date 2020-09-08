@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'User Profile'"></title>
+    <title th:text="'Edit Profile'"></title>
     <style>
         .container {
             display: flex;
@@ -183,31 +184,32 @@
                 </div>
             </div>
             <div class="profileBodyRight">
-                <form id="profileForm" th:action="@{/editProfile}" th:object="${userObj}" method="post">
+                <form id="profileForm" th:action="@{/editProfile}" th:object="${editedUser}" method="post">
+                    <input type="hidden" name="id" th:value="${currentUser.id}">
                     <table>
                         <tr>
                             <td class="profileInputText">Name</td>
                         </tr>
                         <tr>
-                            <td><input type="text" class="profileInputBox" th:field="${userObj.name}"></td>
+                            <td><input type="text" class="profileInputBox" th:field="*{name}" th:placeholder="${currentUser.name}"></td>
                         </tr>
                         <tr>
                             <td class="profileInputText">Nickname</td>
                         </tr>
                         <tr>
-                            <td><input type="text" class="profileInputBox" th:field="${userObj.nickname}"></td>
+                            <td><input type="text" class="profileInputBox" th:field="*{nickname}" th:placeholder="${currentUser.nickname}"></td>
                         </tr>
                         <tr>
                             <td class="profileInputText">Email</td>
                         </tr>
                         <tr>
-                            <td><input type="text" class="profileInputBox" th:field="${userObj.email}"></td>
+                            <td><input type="text" class="profileInputBox" th:field="*{email}" th:placeholder="${currentUser.email}"></td>
                         </tr>
                         <tr>
                             <td class="profileInputText">Password</td>
                         </tr>
                         <tr>
-                            <td><input type="password" class="profileInputBox" th:field="${userObj.password}"></td>
+                            <td><input type="password" class="profileInputBox" th:field="*{password}"></td>
                         </tr>
                     </table>
                     <button type="submit" class="imgBtn" id="updateProfileBtn" hidden="true">Update Changes</button>
@@ -218,8 +220,11 @@
 
         <div class="deleteAccountDiv">
             <h1>Delete Account</h1>
-            <p>By deleting your account, you will be losing your account data and personal rooms. Once you delete your account, this information cannot be recovered.</p>
-            <button id="deleteAccountBtn" class="imgBtn">Delete your account</button>
+            <p>By deleting your account, you will not be losing your account data and personal rooms. Even if you delete your account, this information can be recovered.</p>
+            <form th:action="@{/deleteProfile}">
+                <input type="hidden" name="userId" th:value="${currentUser.id}">
+                <button type="submit" id="deleteAccountBtn" class="imgBtn">Delete your account</button>
+            </form>
         </div>
     </div>
 
