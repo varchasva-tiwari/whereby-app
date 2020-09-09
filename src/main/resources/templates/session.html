@@ -17,11 +17,15 @@
 			display: grid;
 			grid-template-rows: 50% 50%;
 			border: 1px solid white;
-			width: 50px;
-			height: 30px;
+<!--			width: 50px;-->
+<!--			height: 30px;-->
 			background-color: lightgrey;
 			border-radius: 8px;
 			padding: 3px;
+			position: absolute;
+            width: 276px;
+            top: 75%;
+            height: 10%;
 		}
 
 		.emojis {
@@ -30,6 +34,7 @@
 			border: 1px solid white;
 			outline: none;
 		}
+
 		.emojis:hover {
 			cursor: pointer;
 			border: 1px solid white;
@@ -67,8 +72,6 @@
 			width: 2em;
 			height: 3em;
 		}
-
-
     </style>
 </head>
 
@@ -110,6 +113,12 @@
 					<label id="hours">00</label>:<label id="minutes">00</label>:<label id="seconds">00</label>
 				</div>
             </div>
+            <div>
+                <form th:action="@{/editProfile}" method="get">
+                    <input type="hidden" name="userId" th:value="${currentUserId}">
+                    <input type="submit" value="Edit profile">
+                </form>
+            </div>
             <div class="room-extras">
                 <button type="button" class="room-pip-button" name="pip">
                     <div class="room-pip">
@@ -140,11 +149,6 @@
                     </button>
                     <div id="profileDropdown" class="dropdown-content" hidden>
                         <div class="menu">
-                            <a href="#profile" target="_blank" class="">
-                                <div class="">
-                                    Edit profile
-                                </div>
-                            </a>
                             <button type="button" name="changeName" class="">
                                 <div class="">
                                     Set display name
@@ -161,7 +165,6 @@
                 </div>
             </div>
         </div>
-
 
         <div id="main-container" class="videoContainer">
             <div class="oneVideo" id="main-video">
@@ -257,7 +260,7 @@
         </div>
         <div id="msgForm" class="chatFooter" style="padding: 0;">
             <form id="messengerForm" style="height: 100%;">
-                <div id="toggleEmoji" hidden=true style="height: 100%;">
+                <div id="toggleEmoji" hidden=true >
                     <div id="emojis-div">
                         <div class="emoji-div-1">
                             <input type="button" class="emojis"
@@ -338,7 +341,7 @@
 					publishAudio:myAudioEnabled,
 					publishVideo:true,
 					resolution:'640x480',
-					framRate:30,
+					frameRate:30,
 					insertMode:'APPEND',
 					mirror:true
 				})
@@ -873,13 +876,7 @@
 	}
 
 	function footerScreenToggle() {
-		screenShareEnabled = !screenShareEnabled;
-
-		if(screenShareEnabled == true) {
-			shareScreen();
-		} else {
-			backToOldScreen(publisher);
-		}
+		shareScreen();
 	}
 
 	function footerChatToggle() {
@@ -945,8 +942,6 @@ function appendUserData(videoElement, connection) {
 		videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
 		addClickListener(videoElement, clientData, serverData);
 	}
-
-
 
 	function removeUserData(connection) {
 		var userNameRemoved = $("#data-" + connection.connectionId);
