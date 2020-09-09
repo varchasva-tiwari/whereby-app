@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title th:text="'Edit Profile'"></title>
     <style>
@@ -97,11 +96,16 @@ xmlns:th="http://www.thymeleaf.org">
             color: white;
         }
 
-        #resetImgBtn {
+        #updateImgBtn {
             border: 1px solid #c7473c;
             width: 5em;
             background-color: white;
             color: #c7473c;
+        }
+
+        #pic {
+            width: 15em;
+            height: 15em;
         }
 
         #deleteAccountBtn {
@@ -147,12 +151,20 @@ xmlns:th="http://www.thymeleaf.org">
             cursor: pointer;
         }
 
+        #updateImgBtn:hover {
+            cursor: pointer;
+        }
+
         .deleteAccountDiv {
             border: 3px solid gray;
             width: 60em;
             height: 13em;
             margin: 3em;
             padding: 1em;
+        }
+
+        #imgSizeWarning {
+            bottom: 2em;
         }
 
         .footer {
@@ -173,16 +185,21 @@ xmlns:th="http://www.thymeleaf.org">
         <div class="profileBody">
             <div class="profileBodyLeft">
                 <div class="profilePic">
+                    <img th:src="${pic} == null ? _ : @{'data:image/jpg;base64,'+${pic}}" id="pic">
                 </div>
-                <div class="profilePicOptions">
-                    <div class="editImgBtnWrapper">
-                        <button id="editImgBtn" class="imgBtn">Edit Image</button>
-                        <input type="file" name="imgFile">
-                    </div>
-
-                    <!--<button id="resetImgBtn" class="imgBtn">Reset</button>-->
-                </div>
+                    <form th:action="@{/saveImage}" enctype="multipart/form-data" method="post">
+                        <div class="profilePicOptions">
+                            <div class="editImgBtnWrapper">
+                                <input type="hidden" name="userId" th:value="${currentUser.id}">
+                                <button id="editImgBtn" class="imgBtn">Choose Image</button>
+                                <input type="file" name="imgFile">
+                            </div>
+                            <button type="submit" id="updateImgBtn" class="imgBtn">Update Image</button>
+                        </div>
+                        <p id="imgSizeWarning" th:text="'Max image size: 10MB'"></p>
+                    </form>
             </div>
+
             <div class="profileBodyRight">
                 <form id="profileForm" th:action="@{/editProfile}" th:object="${editedUser}" method="post">
                     <input type="hidden" name="id" th:value="${currentUser.id}">

@@ -28,8 +28,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "profile_pic_URL")
-    private URL profilePicURL;
+    @Column(name = "profile_pic_name")
+    private String profilePicName;
 
     @Column(name = "role")
     private String role;
@@ -78,12 +78,12 @@ public class User {
         this.password = password;
     }
 
-    public URL getProfilePicURL() {
-        return profilePicURL;
+    public String getProfilePicName() {
+        return profilePicName;
     }
 
-    public void setProfilePicURL(URL profilePicURL) {
-        this.profilePicURL = profilePicURL;
+    public void setProfilePicName(String profilePicName) {
+        this.profilePicName = profilePicName;
     }
 
     public String getRole() {

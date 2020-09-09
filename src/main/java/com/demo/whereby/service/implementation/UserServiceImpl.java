@@ -1,5 +1,13 @@
 package com.demo.whereby.service.implementation;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.util.IOUtils;
 import com.demo.whereby.entity.User;
 import com.demo.whereby.repository.UserRepository;
 import com.demo.whereby.service.interfaces.UserService;
@@ -11,10 +19,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 @Service
 public class UserServiceImpl implements UserService {
+    AWSCredentials awsCredentials = new BasicAWSCredentials("AKIARCOFU6RC7CT7HONM",
+            "/L6CDMEm9U/nZKqqWXUgIfjV2HQpCq2OOAXLlsIk");
+
+    AmazonS3 s3Client = AmazonS3ClientBuilder
+            .standard()
+            .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+            .withRegion(Regions.AP_SOUTH_1)
+            .build();
 
     @Autowired
     private UserRepository userRepository;
@@ -45,6 +63,9 @@ public class UserServiceImpl implements UserService {
     public User edit(User user) {
         User editedUser = userRepository.findById(user.getId());
 
+        System.out.println(user.getId());
+        System.out.println(editedUser.getId());
+
         if(user.getName() != null && user.getName().length() > 0) {
             editedUser.setName(user.getName());
         }
@@ -72,5 +93,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(int userId) {
         userRepository.findById(userId).setActive(false);
+    }
+
+    @Override
+    public void changeProfilePicName(int id, String name) {
+        userRepository.changeProfilePicName(id, name);
+    }
+
+    @Override
+    public String getProfilePic(int userId) throws IOException {
+        S3Object file = s3Client.getObject("whereby-bucket", userRepository.getProfilePicName(userId));
+
+        byte[] byteArray = IOUtils.toByteArray(file.getObjectContent());
+
+        if(byteArray.length > 0) {
+            return Base64.getEncoder().encodeToString(byteArray);
+        } else {
+            return "";
+        }
     }
 }
