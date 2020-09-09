@@ -4,4 +4,7 @@ import com.demo.whereby.entity.Room;
 
 public interface RoomService {
     Room save(Room room);
+
+    void delete(Integer rid);
+
 }

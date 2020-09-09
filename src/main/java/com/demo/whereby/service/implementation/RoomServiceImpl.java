@@ -16,4 +16,9 @@ public class RoomServiceImpl implements RoomService {
     public Room save(Room room) {
         return roomRepository.save(room);
     }
+
+    @Override
+    public void delete(Integer rid) {
+        roomRepository.deleteById(rid);
+    }
 }
