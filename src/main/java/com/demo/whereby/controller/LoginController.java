@@ -19,7 +19,6 @@ import java.security.Principal;
 @Controller
 public class LoginController {
 
-    //    public static Map<String, MyUser> users = new ConcurrentHashMap<>();
     @Autowired
     private UserService userService;
     @Autowired
