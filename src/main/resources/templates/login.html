@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>login</title>
     <style>
-        form{
+        #form1{
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -45,11 +45,16 @@
             text-transform: uppercase;
     }
 
+    #form2 {
+        margin-top: 25em;
+        margin-left: 30em;
+    }
+
     </style>
 </head>
 <body>
     <h1>user login page</h1>
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" method="post" id="form1">
         <div th:if="${param.error}">
             <div class="alert-danger">
                 Incorrect username or password!
@@ -66,5 +71,8 @@
              <span>New User? <a th:href="@{/registration}">Register Here</a> </span>
     </form>
 
+    <form th:action="@{/google/login}" method="get" id="form2">
+        <input type="submit" value="Sign Up with Google">
+    </form>
 </body>
 </html>

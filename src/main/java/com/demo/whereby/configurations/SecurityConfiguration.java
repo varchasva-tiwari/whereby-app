@@ -4,6 +4,7 @@ import com.demo.whereby.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -30,9 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/session","/dashboard", "/editProfile").authenticated()
-                .regexMatchers(HttpMethod.GET, "/editProfile?userId=[0-9]+").authenticated()
-                .antMatchers("/registerUser","/registration").permitAll()
+                .antMatchers("/session","/dashboard").authenticated()
+                .antMatchers("/registerUser","/registration", "/google/login", "/callback").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -58,5 +59,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
