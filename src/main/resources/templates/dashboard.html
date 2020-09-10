@@ -3,6 +3,15 @@
 <head>
 	<title>openvidu-mvc-java</title>
 
+	<style>
+		#video-container {
+			margin: 2em auto 0;
+			width: 500px;
+			padding: 2em;
+			background: white;
+		}
+	</style>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"></link>
 
@@ -51,6 +60,16 @@
 							<button class="btn btn-lg btn-success" type="submit">Join!</button>
 						</p>
 					</form>
+					<button id="permissionBtn" class="btn btn-lg btn-info">Request Permission</button>
+
+					<div id="video-container">
+						<video id="camera-stream" width="500" autoplay>
+						</video>
+					</div>
+
+					<button id="audioToggle">Toggle Audio</button>
+					<button id="videoToggle">Toggle Video</button>
+
 					<hr></hr>
 					<div id="login-info">
 						<div>Logged as <span th:text="${username}" id="name-user"></span></div>
@@ -73,10 +92,39 @@
 </body>
 
 <script>
+	let constraints = '';
+	navigator.allMediaStreams = [];
 	window.onload = function () { // Generate participant info
 		$("input[name='session-name']").val("Session " + Math.floor(Math.random() * 10));
 		$("input[name='data']").val("Participant " + Math.floor(Math.random() * 100));
 	}
+
+	document.getElementById("permissionBtn").addEventListener("click", () => {
+		 constraints = {
+			audio: true,
+			video: true
+		};
+
+		const video = document.getElementById('camera-stream');
+
+		navigator.mediaDevices.getUserMedia(constraints)
+		.then((stream) => {
+			video.srcObject = stream;
+			navigator.allMediaStreams.push(stream);
+		});
+	})
+
+	document.getElementById("audioToggle").addEventListener("click", () => {
+		navigator.allMediaStreams.forEach((stream) => {
+			stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled;
+		})
+	})
+
+	document.getElementById("videoToggle").addEventListener("click", () => {
+		navigator.allMediaStreams.forEach((stream) => {
+			stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
+		})
+	})
 </script>
 
 </html>

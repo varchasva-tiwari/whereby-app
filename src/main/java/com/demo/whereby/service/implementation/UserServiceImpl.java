@@ -63,9 +63,6 @@ public class UserServiceImpl implements UserService {
     public User edit(User user) {
         User editedUser = userRepository.findById(user.getId());
 
-        System.out.println(user.getId());
-        System.out.println(editedUser.getId());
-
         if(user.getName() != null && user.getName().length() > 0) {
             editedUser.setName(user.getName());
         }
@@ -92,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(int userId) {
-        userRepository.findById(userId).setActive(false);
+        userRepository.deleteById(userId);
     }
 
     @Override
@@ -111,5 +108,15 @@ public class UserServiceImpl implements UserService {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public boolean hasProfilePic(int userId) {
+        String name = userRepository.getProfilePicName(userId);
+        if(name != null && name.length() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }
