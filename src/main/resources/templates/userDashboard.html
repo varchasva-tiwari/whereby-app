@@ -299,7 +299,7 @@ xmlns:th="http://www.thymeleaf.org">
         </a>
         <div class="header-right">
             <a class="active" href="/user-dashboard">Dashboard</a>
-            <a href="/editProfile">Profile</a>
+            <a th:href="@{'/editProfile?userId=' + ${userId}}">Profile</a>
             <a href="/logout">Log out</a>
         </div>
     </div>

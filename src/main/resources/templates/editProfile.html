@@ -238,7 +238,7 @@
         </a>
         <div class="header-right">
             <a href="/user-dashboard">Dashboard</a>
-            <a class="active" href="/editProfile">Profile</a>
+            <a class="active" th:href="@{'/editProfile?userId=' + ${currentUser.id}}">Profile</a>
             <a href="/logout">Log out</a>
         </div>
     </div>
