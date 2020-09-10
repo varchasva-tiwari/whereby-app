@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>purchase meeting</title>
+    <style>
+           form{
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        width: 40vw;
+    }
+
+     input[type="number"]{
+        padding: 5px;
+        margin-bottom: 4px;
+        font-size: 1.3rem;
+        border: transparent;
+        border-radius: 10px;
+        outline: none;
+        border-bottom: 2px solid black;
+    }
+
+    input[type="submit"]{
+        width: 30%;
+        margin-top: 5px;
+        font-size: 1.3rem;
+        outline: none;
+        background: transparent;
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    h1{
+            text-align: center;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            text-transform: uppercase;
+    }
+    </style>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <form th:action="@{/orders}" method="post">
+        <label for="meetings">add number of meetings : </label>
+        <input id="meetings" name="meetings" type="number">
+        <input id="phoneNumber" name="phoneNumber" type="number">
+        <input type="submit" value="purchase">
+    </form>
+</body>
+</html>

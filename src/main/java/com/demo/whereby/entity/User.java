@@ -46,6 +46,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Room> rooms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Orders> orders = new ArrayList<>();
+
     public User() {
     }
 
@@ -135,5 +138,13 @@ public class User {
 
     public void setRooms(Room room) {
         this.rooms.add(room);
+    }
+
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders.add(orders);
     }
 }

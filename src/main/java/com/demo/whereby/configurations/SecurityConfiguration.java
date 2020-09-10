@@ -30,7 +30,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         
         http.authorizeRequests()
-                .antMatchers("/orders","/dashboard","/dashboard**","/dashboard/**","/dashboard*","/dashboard/*","/editProfile").authenticated()
+                .antMatchers("/orders",
+                        "/dashboard",
+                        "/dashboard**",
+                        "/dashboard/**",
+                        "/dashboard*",
+                        "/dashboard/*",
+                        "/editProfile",
+                        "/buy-meeting"
+                ).authenticated()
                 .regexMatchers(HttpMethod.GET, "/editProfile?userId=[0-9]+").authenticated()
                 .antMatchers(
                         "/registerUser",

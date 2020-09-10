@@ -382,7 +382,7 @@ xmlns:th="http://www.thymeleaf.org">
                     </div>
                 </div>
                 <div class="room-actions">
-                    <form action="#">
+                    <form th:action="@{/buy-meeting}">
                         <input type="hidden" name="userName" th:value="${userName}" />
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <button type="submit" class="wrapper-button" name="buy">
@@ -411,9 +411,6 @@ xmlns:th="http://www.thymeleaf.org">
             </form>
         </div>
     </div>
-<form th:action="@{/orders}" method="post">
-    <input type="submit" value="buy more meetings">
-</form>
     <div class="footer"></div>
 </div>
 

@@ -132,4 +132,10 @@ public class DashboardController {
         return (UserDetails) principal;
     }
 
+    @GetMapping("/buy-meeting")
+    public String buyMeeting(Model model){
+        model.addAttribute("user",SecurityContextHolder.getContext().getAuthentication().getName());
+        return "purchaseMeeting";
+    }
+
 }
