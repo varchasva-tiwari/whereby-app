@@ -7,4 +7,6 @@ public interface RoomService {
 
     void delete(Integer rid);
 
+    boolean roomExists(String name);
+
 }

@@ -2,15 +2,20 @@ package com.demo.whereby.controller;
 
 import com.demo.whereby.entity.Room;
 import com.demo.whereby.entity.User;
+import com.demo.whereby.model.RoomModel;
 import com.demo.whereby.service.interfaces.RoomService;
 import com.demo.whereby.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class DashboardController {
@@ -22,7 +27,27 @@ public class DashboardController {
     private RoomService roomService;
 
     @GetMapping(value = "/user-dashboard")
-    public String goToDashboard() {
+    public String goToDashboard(Model model) {
+
+        if (!isUserLoggedIn()) {
+            return "redirect:/login";
+        }
+
+        String email = getLoggedInUser().getUsername();
+        User user = userService.findByEmail(email);
+
+        List<RoomModel> rooms = null;
+        if (user.getRooms() != null) {
+            rooms = new ArrayList<>();
+            for (Room room : user.getRooms()) {
+                RoomModel roomModel = new RoomModel(room.getId(), room.getName());
+                rooms.add(roomModel);
+            }
+        }
+
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("userName", user.getName());
+
         return "userDashboard";
     }
 
@@ -47,7 +72,7 @@ public class DashboardController {
             }
             userService.save(user);
         }
-        return "redirect:/user-dashboard?delete-success";
+        return "redirect:/user-dashboard?deleteSuccess";
     }
 
     @PostMapping("/user-dashboard/create-room")
@@ -55,6 +80,9 @@ public class DashboardController {
 
         if (!isUserLoggedIn()) {
             return "redirect:/login";
+        }
+        if (roomService.roomExists(roomName)) {
+            return "redirect:/user-dashboard?roomExists";
         }
         String email = getLoggedInUser().getUsername();
         User user = userService.findByEmail(email);
@@ -70,16 +98,18 @@ public class DashboardController {
         }
 
         if (result != null) {
-            return "redirect:/user-dashboard?room-success";
+            return "redirect:/user-dashboard?roomSuccess";
         } else {
-            return "redirect:/user-dashboard?room-failure";
+            return "redirect:/user-dashboard?roomFailure";
         }
     }
 
     @GetMapping(value = "/user-dashboard/join")
-    public String joinExistingRoom(@RequestParam("rid") Long rid) {
-        // send to process controller with pre-filled nickname and room
-        return "";
+    public String joinExistingRoom(@RequestParam("roomName") String roomName) {
+        if (!roomService.roomExists(roomName)) {
+            return "redirect:/user-dashboard?roomNotExists";
+        }
+        return "redirect:/join-meeting/" + roomName;
     }
 
     // send redirect to profile controller

@@ -7,6 +7,8 @@ import com.demo.whereby.service.interfaces.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoomServiceImpl implements RoomService {
     @Autowired
@@ -20,5 +22,20 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void delete(Integer rid) {
         roomRepository.deleteById(rid);
+    }
+
+    @Override
+    public boolean roomExists(String name) {
+        boolean result = false;
+        List<Room> rooms = roomRepository.findAll();
+        if(rooms != null){
+            for(Room room:rooms){
+                if(room.getName().equalsIgnoreCase(name)){
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
