@@ -94,9 +94,9 @@ public class DashboardController {
         user.setRooms(room);
 
         Object result = userService.save(user);
-        if (result != null) {
-            result = roomService.save(room);
-        }
+//        if (result != null) {
+//            result = roomService.save(room);
+//        }
 
         if (result != null) {
             return "redirect:/user-dashboard?roomSuccess";
