@@ -7,15 +7,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Controller
 public class ProfileController {
     @Autowired
     private UserService userService;
 
     @GetMapping("/editProfile")
-    public String getEditedProfile(@RequestParam("userId") int currentUserId, Model model) {
+    public String getEditedProfile(@RequestParam("userId") int currentUserId,
+                                   @ModelAttribute("pic") String pic,
+                                   @ModelAttribute("fileName") String profilePicName,
+                                   Model model) throws IOException {
+        String profilePic = null;
+
+        if(profilePicName != null && profilePicName.length() > 0) {
+            userService.changeProfilePicName(currentUserId, profilePicName);
+        }
+
+        if(profilePic == null || profilePic.length() == 0) {
+            profilePic = userService.getProfilePic(currentUserId);
+        } else {
+            profilePic = pic;
+        }
+
         model.addAttribute("currentUser", userService.findById(currentUserId));
         model.addAttribute("editedUser", new User());
+        model.addAttribute("pic", profilePic);
+
         return "editProfile";
     }
 
