@@ -48,6 +48,7 @@ public class DashboardController {
         model.addAttribute("rooms", rooms);
         model.addAttribute("userName", user.getName());
         model.addAttribute("userId",user.getId());
+        model.addAttribute("meetingsLeft",user.getMeetingsLeft());
 
         return "userDashboard";
     }

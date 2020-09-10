@@ -30,6 +30,8 @@ public class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private final int FREE_MEETINGS = 2;
+
 //    public LoginController() {
 //        users.put("publisher1", new MyUser("publisher1", "pass", OpenViduRole.PUBLISHER));
 //        users.put("publisher2", new MyUser("publisher2", "pass", OpenViduRole.PUBLISHER));
@@ -109,6 +111,7 @@ public class LoginController {
         user.setRooms(room);
         user.setCreatedAt(new Date());
         user.setActive(true);
+        user.setMeetingsLeft(FREE_MEETINGS);
 
         userService.save(user);
         roomService.save(room);
