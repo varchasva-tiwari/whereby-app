@@ -327,7 +327,7 @@ xmlns:th="http://www.thymeleaf.org">
             <h3>Your personal rooms</h3>
         </div>
         <div class="profileBody" th:each="room : ${rooms}">
-            <a href="" class="sessionInfo">
+            <a th:href="@{'/join-meeting/' + ${room.name}}" class="sessionInfo">
                 <div class="wrapper-square">
                     <svg class="initials" viewBox="-4 -4 8 8" width="3vh" height="3.5vh">
                         <text x="0" y="0" text-anchor="middle" dominant-baseline="central"
@@ -350,8 +350,8 @@ xmlns:th="http://www.thymeleaf.org">
                         </div>
                     </button>
                 </form>
-                <form action="/user-dashboard/join" method="post">
-                    <input type="hidden" name="rid" th:value="${room.id}" />
+                <form action="/user-dashboard/join">
+                    <input type="hidden" name="roomName" th:value="${room.name}" />
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" class="wrapper-button" name="delete">
                         <div class="wrapper-square delete">
@@ -369,8 +369,8 @@ xmlns:th="http://www.thymeleaf.org">
                 <div th:if="${param.roomNotExists}">
                     <h4 style="color:red">Room doesn't exist.</h4>
                 </div>
-            <form action="/user-dashboard/create-room" method="post">
-                <label class="" font-size="1em">...com:5000/join-meeting/</label>
+            <form action="/user-dashboard/join">
+                <label class="" font-size="1em">.../join-meeting/</label>
                 <input type="text" class="profileInputBox" name="roomName" placeholder="room-name" required>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="submit" value="Join" class="imgBtn">
@@ -387,7 +387,7 @@ xmlns:th="http://www.thymeleaf.org">
                 <label class="profileInputText">Room Name:</label>
                 <input type="text" class="profileInputBox" name="roomName" required>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <input type="submit" value="create" class="imgBtn">
+                <input type="submit" value="Create" class="imgBtn">
             </form>
         </div>
     </div>
