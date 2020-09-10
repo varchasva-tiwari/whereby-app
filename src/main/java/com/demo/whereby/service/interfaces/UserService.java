@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     void changeProfilePicName(int id, String name);
 
     String getProfilePic(int userId) throws IOException;
+
+    boolean hasProfilePic(int userId);
 }

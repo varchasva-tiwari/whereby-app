@@ -25,7 +25,7 @@ public class ProfileController {
             userService.changeProfilePicName(currentUserId, profilePicName);
         }
 
-        if(profilePic == null || profilePic.length() == 0) {
+        if(userService.hasProfilePic(currentUserId)) {
             profilePic = userService.getProfilePic(currentUserId);
         } else {
             profilePic = pic;
