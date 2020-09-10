@@ -185,16 +185,16 @@
         <div class="profileBody">
             <div class="profileBodyLeft">
                 <div class="profilePic">
-                    <img th:src="${pic} == null ? _ : @{'data:image/jpg;base64,'+${pic}}" id="pic">
+                    <img th:src="${pic} == null ? _ : @{'data:image/jpg;base64,'+${pic}}" id="pic" alt="No profile pic uploaded">
                 </div>
                     <form th:action="@{/saveImage}" enctype="multipart/form-data" method="post">
                         <div class="profilePicOptions">
                             <div class="editImgBtnWrapper">
                                 <input type="hidden" name="userId" th:value="${currentUser.id}">
                                 <button id="editImgBtn" class="imgBtn">Choose Image</button>
-                                <input type="file" name="imgFile">
+                                <input type="file" id="imgFile" name="imgFile" accept=".jpeg,.jpg,.png">
                             </div>
-                            <button type="submit" id="updateImgBtn" class="imgBtn">Update Image</button>
+                            <button type="submit" id="updateImgBtn" class="imgBtn" hidden="true">Update Image</button>
                         </div>
                         <p id="imgSizeWarning" th:text="'Max image size: 10MB'"></p>
                     </form>
@@ -238,7 +238,7 @@
         <div class="deleteAccountDiv">
             <h1>Delete Account</h1>
             <p>By deleting your account, you will not be losing your account data and personal rooms. Even if you delete your account, this information can be recovered.</p>
-            <form th:action="@{/deleteProfile}">
+            <form th:action="@{/deleteProfile}" method="post">
                 <input type="hidden" name="userId" th:value="${currentUser.id}">
                 <button type="submit" id="deleteAccountBtn" class="imgBtn">Delete your account</button>
             </form>
@@ -253,6 +253,10 @@
         item.addEventListener("focus", () => {
             document.getElementById("updateProfileBtn").hidden = false;
         })
+    })
+
+    document.getElementById("imgFile").addEventListener("input", () => {
+        document.getElementById("updateImgBtn").hidden = false;
     })
 </script>
 </body>
