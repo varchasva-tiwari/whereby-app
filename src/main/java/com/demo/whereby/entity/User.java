@@ -31,6 +31,9 @@ public class User {
     @Column(name = "profile_pic_name")
     private String profilePicName;
 
+    @Column(name = "meetings_left")
+    private int meetingsLeft;
+
     @Column(name = "role")
     private String role;
 
@@ -116,6 +119,14 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public int getMeetingsLeft() {
+        return meetingsLeft;
+    }
+
+    public void setMeetingsLeft(int meetingsLeft) {
+        this.meetingsLeft = meetingsLeft;
     }
 
     public List<Room> getRooms() {

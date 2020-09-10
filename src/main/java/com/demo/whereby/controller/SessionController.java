@@ -112,6 +112,18 @@ public class SessionController {
 							return "redirect:/leaveSession?userName="+userName+"&session-name="+sessionName;
 						}
 					} else {
+						// checking for meetings left. If not than need to buy
+						User loggedInUserDetail = userService.findByEmail(userName);
+						int meetingsLeft = loggedInUserDetail.getMeetingsLeft();
+						if(meetingsLeft<=0){
+							return "redirect:/user-dashboard?buy";
+						}else {
+							meetingsLeft--;
+							loggedInUserDetail.setMeetingsLeft(meetingsLeft);
+							userService.save(loggedInUserDetail);
+						}
+
+						// meeting left true. Create meeting
 						SessionProperties properties = new SessionProperties.Builder()
 								.recordingMode(RecordingMode.MANUAL)// RecordingMode.ALWAYS for automatic recording
 								.defaultOutputMode(Recording.OutputMode.COMPOSED)
