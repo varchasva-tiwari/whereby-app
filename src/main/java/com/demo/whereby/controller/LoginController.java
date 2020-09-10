@@ -95,6 +95,10 @@ public class LoginController {
 
     @RequestMapping(value = "/registerUser",method = RequestMethod.POST)
     public String userRegistrationHandler(@ModelAttribute RegistrationModel registrationModel) {
+        if (roomService.roomExists(registrationModel.getRoom())) {
+            return "redirect:/registration?roomExists";
+        }
+
         User user = new User();
         Room room = new Room();
         room.setName(registrationModel.getRoom());
