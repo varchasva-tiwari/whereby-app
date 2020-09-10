@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>payment</title>
+</head>
+<body>
+<form action="/user-dashboard">
+    <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            th:data-key="${key}"
+            data-amount="100"
+            data-currency="INR"
+            th:data-order_id="${order}"
+            data-buttontext="Pay with Razorpay"
+            data-name="meeting"
+            data-description="buy more meeting with RazorPay"
+            data-prefill.name="shubh"
+            data-prefill.email="shubhamsharma4539@gmail.com"
+            data-prefill.contact="8462848929"
+            data-theme.color="#F37254" ></script>
+    <input type="hidden" custom="Hidden Element" name="hidden">
+</form>
+</body>
+</html>
