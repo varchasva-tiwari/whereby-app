@@ -38,7 +38,7 @@ public class User {
     private Date createdAt;
 
     @Column(name = "active")
-    private boolean active;
+    private boolean active = true;
 
     @OneToMany(mappedBy = "user")
     private List<Room> rooms = new ArrayList<>();

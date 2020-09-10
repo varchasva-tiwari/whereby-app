@@ -16,4 +16,9 @@ public class RoomServiceImpl implements RoomService {
     public Room save(Room room) {
         return roomRepository.save(room);
     }
+
+    @Override
+    public Room findByRoom(String sessionName) {
+        return roomRepository.findByName(sessionName);
+    }
 }

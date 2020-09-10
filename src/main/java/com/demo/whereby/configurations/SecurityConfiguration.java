@@ -28,8 +28,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/session","/dashboard").authenticated()
-                .antMatchers("/registerUser","/registration").permitAll()
+                .antMatchers("/dashboard","/dashboard**","/dashboard/**","/dashboard*","/dashboard/*").authenticated()
+                .antMatchers(
+                        "/registerUser",
+                        "/leaveSession**",
+                        "/join-meeting/*",
+                        "/registration",
+                        "/session/**",
+                        "/footer/**",
+                        "/images/**",
+                        "/customStyle.css",
+                        "/style.css",
+                        "/openvidu-browser-2.15.0.js"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

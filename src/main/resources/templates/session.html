@@ -4,6 +4,7 @@
     <title th:text="${sessionName}"></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
+    <base href="/">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <link rel="stylesheet"
@@ -71,6 +72,14 @@
 		.footerImgs {
 			width: 2em;
 			height: 3em;
+		}
+		#meetingLink{
+		    height: 100%;
+            font-size: 1.1rem;
+            width: 100%;
+            outline: none;
+            border: none;
+            cursor:pointer;
 		}
     </style>
 </head>
@@ -208,15 +217,11 @@
                     <label for="peopleBtn">People</label>
                 </div>
 
-                <form action="/leave-session" method="post">
+                <form id="leaveForm" th:action="@{/leaveSession}">
                     <input type="hidden" name="session-name" th:value="${sessionName}"></input>
                     <input type="hidden" name="token" th:value="${token}"></input>
-                    <div class="footerBtnDiv">
-                        <button type="submit" id="leaveBtn" class="footerBtn"><img src="footer/finger.svg"
-                                                                                   class="footerImgs"
-                                                                                   onclick="leaveSession()"></button>
-                        <label for="leaveBtn">Leave</label>
-                    </div>
+                    <input type="hidden" name="userName" th:value="${userName}"></input>
+                        <button type="submit">leave</button>
                 </form>
             </div>
 
@@ -234,7 +239,18 @@
         <div id="members" class="memberList" hidden>
 
             <div class="memberListContent">
-                <div>
+
+                <div th:if="${owner}">
+                    <h3>Share the link to add more people</h3>
+                </div>
+                <div th:if="${owner}">
+                    <h6>Click on the link to copy to clipboard</h6>
+                </div>
+                <div th:if="${owner}">
+                    <input id="meetingLink" type="text" value="">
+                </div>
+
+                <div th:if="${owner}">
                     <p>In the room</p>
                     <div>
                         <span class="subUnsubBtn">....</span>
@@ -421,31 +437,35 @@
 	/** making video clickable and init main screen stops **/
 
 	/** video on/off logic starts **/
-	document.getElementById("xx").addEventListener("click",(e)=>{
-		const signal = {
-			type:"turnOffVideo",
-			to:[]
-		}
-		session.streamManagers.forEach(member=>{
-			if(member.stream.connection.connectionId !== session.connection.connectionId){
-				signal.to.push(member.stream.connection);
-			}
-		})
-		session.signal(signal)
-	});
+	if(document.getElementById("xx")){
+        document.getElementById("xx").addEventListener("click",(e)=>{
+            const signal = {
+                type:"turnOffVideo",
+                to:[]
+            }
+            session.streamManagers.forEach(member=>{
+                if(member.stream.connection.connectionId !== session.connection.connectionId){
+                    signal.to.push(member.stream.connection);
+                }
+            })
+            session.signal(signal)
+        })
+	}
 
-	document.getElementById("yy").addEventListener("click",(e)=>{
-		const signal = {
-			type:"turnOnVideo",
-			to:[]
-		}
-		session.streamManagers.forEach(member=>{
-			if(member.stream.connection.connectionId !== session.connection.connectionId){
-				signal.to.push(member.stream.connection);
-			}
-		})
-		session.signal(signal)
-	});
+	if(document.getElementById("yy")){
+        document.getElementById("yy").addEventListener("click",(e)=>{
+            const signal = {
+                type:"turnOnVideo",
+                to:[]
+            }
+            session.streamManagers.forEach(member=>{
+                if(member.stream.connection.connectionId !== session.connection.connectionId){
+                    signal.to.push(member.stream.connection);
+                }
+            })
+            session.signal(signal)
+        })
+	}
 
 	session.on("signal:turnOffVideo",()=>{
 		publisher.publishVideo(false);
@@ -971,5 +991,15 @@ function appendUserData(videoElement, connection) {
 	}
 	/**footer Btn functions end*/
 
+	if(document.getElementById("meetingLink")){
+	    document.getElementById("meetingLink").value = window.location.origin+"/join-meeting/"+sessionName;
+	    document.getElementById("meetingLink").readOnly = true;
+	    document.getElementById("meetingLink").addEventListener("click",(e)=>{
+	          document.getElementById("meetingLink").select();
+              document.getElementById("meetingLink").setSelectionRange(0, 99999);
+              document.execCommand("copy")
+	    })
+	}
+    document.getElementById("leaveForm").addEventListener("submit",leaveSession)
 </script>
 </html>

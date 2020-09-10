@@ -4,4 +4,6 @@ import com.demo.whereby.entity.Room;
 
 public interface RoomService {
     Room save(Room room);
+
+    Room findByRoom(String sessionName);
 }
