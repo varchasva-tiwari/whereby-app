@@ -43,8 +43,7 @@ public class SessionController {
 
 	@RequestMapping(value = "/session", method = RequestMethod.POST)
 	public String joinSession(@RequestParam(name = "data") String clientData,
-			@RequestParam(name = "session-name") String sessionName, Model model, HttpSession httpSession) {
-
+			@RequestParam(name = "session-name") String sessionName, @RequestParam("audioEnabled") String audioEnabled, @RequestParam("videoEnabled") String videoEnabled,  Model model, HttpSession httpSession) {
 		try {
 			checkUserLogged(httpSession);
 		} catch (Exception e) {
@@ -84,6 +83,8 @@ public class SessionController {
 				model.addAttribute("nickName", clientData);
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 				model.addAttribute("locked", true);
+				model.addAttribute("audioEnabled", audioEnabled);
+				model.addAttribute("videoEnabled", videoEnabled);
 
 				model.addAttribute("currentUserId", user.getId());
 
@@ -122,6 +123,9 @@ public class SessionController {
 				model.addAttribute("userName", httpSession.getAttribute("loggedUser"));
 
 				model.addAttribute("currentUserId", user.getId());
+
+				model.addAttribute("audioEnabled", audioEnabled);
+				model.addAttribute("videoEnabled", videoEnabled);
 
 				// Return session.html template
 				return "session";
