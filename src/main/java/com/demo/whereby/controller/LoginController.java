@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Controller
@@ -93,7 +92,7 @@ public class LoginController {
 //        return !(httpSession == null || httpSession.getAttribute("loggedUser") == null);
 //    }
 
-    @RequestMapping(value = "/registerUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     public String userRegistrationHandler(@ModelAttribute RegistrationModel registrationModel) {
         if (roomService.roomExists(registrationModel.getRoom())) {
             return "redirect:/registration?roomExists";
@@ -124,7 +123,7 @@ public class LoginController {
 
     @RequestMapping("/registration")
     public String registrationPage(Model model) {
-        model.addAttribute("user",new RegistrationModel());
+        model.addAttribute("user", new RegistrationModel());
         return "registration";
     }
 

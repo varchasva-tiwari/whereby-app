@@ -38,7 +38,7 @@ public class User {
     private Date createdAt;
 
     @Column(name = "active")
-    private boolean active;
+    private boolean active = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Room> rooms = new ArrayList<>();

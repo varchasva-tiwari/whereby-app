@@ -9,4 +9,5 @@ public interface RoomService {
 
     boolean roomExists(String name);
 
+    Room findByRoom(String sessionName);
 }

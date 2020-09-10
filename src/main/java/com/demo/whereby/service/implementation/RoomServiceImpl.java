@@ -38,4 +38,8 @@ public class RoomServiceImpl implements RoomService {
         }
         return result;
     }
+    
+    public Room findByRoom(String sessionName) {
+        return roomRepository.findByName(sessionName);
+    }
 }
