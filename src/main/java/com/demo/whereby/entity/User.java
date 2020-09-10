@@ -40,7 +40,7 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Room> rooms = new ArrayList<>();
 
     public User() {

@@ -47,7 +47,7 @@ public class ProfileController {
         return "redirect:/editProfile?userId="+user.getId();
     }
 
-    @DeleteMapping("/deleteProfile")
+    @PostMapping("/deleteProfile")
     public String deleteProfile(@RequestParam("userId") int userId) {
         userService.deleteById(userId);
 
