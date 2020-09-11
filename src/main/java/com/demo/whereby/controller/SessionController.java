@@ -1,15 +1,24 @@
 package com.demo.whereby.controller;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.SynthEditorPaneUI;
 
 import com.demo.whereby.entity.User;
 import com.demo.whereby.service.interfaces.UserService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +30,9 @@ public class SessionController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	// OpenVidu object as entrypoint of the SDK
 	private OpenVidu openVidu;
@@ -43,7 +55,11 @@ public class SessionController {
 
 	@RequestMapping(value = "/session", method = RequestMethod.POST)
 	public String joinSession(@RequestParam(name = "data") String clientData,
-			@RequestParam(name = "session-name") String sessionName, @RequestParam("audioEnabled") String audioEnabled, @RequestParam("videoEnabled") String videoEnabled,  Model model, HttpSession httpSession) {
+			@RequestParam(name = "session-name") String sessionName,
+							  @RequestParam("audioEnabled") String audioEnabled,
+							  @RequestParam("videoEnabled") String videoEnabled,
+                              Model model,
+							  HttpSession httpSession) throws IOException {
 		try {
 			checkUserLogged(httpSession);
 		} catch (Exception e) {
@@ -51,12 +67,27 @@ public class SessionController {
 		}
 		System.out.println("Getting sessionId and token | {sessionName}={" + sessionName + "}");
 
+		SecurityContext context = SecurityContextHolder.getContext();
+		User user = null;
+
 		// Role associated to this user
-		User user = userService.findByEmail(httpSession.getAttribute("loggedUser").toString());
-		OpenViduRole role = null;
-		if(user.getRole().equals("publisher")){
-			role = OpenViduRole.PUBLISHER;
+		user = userService.findByEmail(httpSession.getAttribute("loggedUser").toString());
+
+		if(user == null) {
+			user = new User();
+			user.setName((String) context.getAuthentication().getPrincipal());
+			user.setEmail((String) context.getAuthentication().getPrincipal());
+			user.setPassword(passwordEncoder.encode((String) context.getAuthentication().getCredentials()));
+			user.setCreatedAt(new Date());
+			String authorities = context.getAuthentication().getAuthorities().toString();
+			user.setRole(context.getAuthentication().getAuthorities().toString().substring(1,authorities.length()-1));
+
+			user = userService.save(user);
 		}
+
+		OpenViduRole role = null;
+
+		role = OpenViduRole.PUBLISHER;
 
 		// Optional data to be passed to other users when this user connects to the video-call
 		// In this case, a JSON with the value we stored in the HttpSession object on login
@@ -107,9 +138,17 @@ public class SessionController {
 						.defaultOutputMode(Recording.OutputMode.COMPOSED)
 						.defaultRecordingLayout(RecordingLayout.BEST_FIT)
 						.build();
+
 				Session session = this.openVidu.createSession(properties);
 				// Generate a new token with the recently created tokenOptions
+
+				if(session != null) {
+					System.out.println("here");
+				}
+
 				String token = session.generateToken(tokenOptions);
+
+				System.out.println(token);
 
 				// Store the session and the token in our collections
 				this.mapSessions.put(sessionName, session);
@@ -127,11 +166,21 @@ public class SessionController {
 				model.addAttribute("audioEnabled", audioEnabled);
 				model.addAttribute("videoEnabled", videoEnabled);
 
+				System.out.println(sessionName);
+				System.out.println(token);
+				System.out.println(clientData);
+				System.out.println(httpSession.getAttribute("loggedUser"));
+				System.out.println(user.getId());
+
+
+
+
 				// Return session.html template
 				return "session";
 
 			} catch (Exception e) {
 				// If error just return dashboard.html template
+				e.printStackTrace();
 				model.addAttribute("username", httpSession.getAttribute("loggedUser"));
 				return "dashboard";
 			}
