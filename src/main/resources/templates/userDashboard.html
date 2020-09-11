@@ -289,9 +289,13 @@ xmlns:th="http://www.thymeleaf.org">
     <div th:if="${param.roomSuccess}">
       <h4 style="color:green">Room created successfully.</h4>
     </div>
-    <!-- create success message -->
+    <!-- payment success message -->
     <div th:if="${param.paymentSuccess}">
         <h4 style="color:green">Meetings purchased successfully.</h4>
+    </div>
+    <!-- payment cancel message -->
+    <div th:if="${param.paymentCancel}">
+        <h4 style="color:red">Payment canceled.</h4>
     </div>
     <!-- create room error message -->
     <div th:if="${param.roomFailure}">
