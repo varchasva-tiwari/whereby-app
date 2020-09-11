@@ -50,8 +50,8 @@
     <h1>Checkout</h1>
     <form th:action="@{/orders}" method="post">
         <label for="meetings">add number of meetings : </label>
-        <input id="meetings" name="meetings" type="number">
-        <input id="phoneNumber" name="phoneNumber" type="number">
+        <input id="meetings" name="meetings" type="number" placeholder="number of meetings" min="1">
+        <input id="phoneNumber" name="phoneNumber" type="number" placeholder="phone number">
         <input type="submit" value="purchase">
     </form>
 </body>

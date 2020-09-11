@@ -100,7 +100,7 @@ public class PaymentController {
             orderDtlService.save(ordersDtls);
         }
 
-        return "rediret:/user-dashboard";
+        return "redirect:/user-dashboard?paymentSuccess";
     }
 
 }

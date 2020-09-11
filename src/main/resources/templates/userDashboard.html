@@ -289,6 +289,10 @@ xmlns:th="http://www.thymeleaf.org">
     <div th:if="${param.roomSuccess}">
       <h4 style="color:green">Room created successfully.</h4>
     </div>
+    <!-- create success message -->
+    <div th:if="${param.paymentSuccess}">
+        <h4 style="color:green">Meetings purchased successfully.</h4>
+    </div>
     <!-- create room error message -->
     <div th:if="${param.roomFailure}">
         <h4 style="color:red">Error in creating room. Try again. </h4>
@@ -363,10 +367,10 @@ xmlns:th="http://www.thymeleaf.org">
         <!-- showing meetings left and buy options-->
         <div class="specialActionDiv">
             <h2>Meetings Available</h2>
+            <p>You can buy a meetings for Rs 2. Do check out our payment options.</p>
             <!-- room error message -->
             <div th:if="${meetingsLeft <= 0}">
                 <h4 style="color:red">No meetings left. Buy to create more meetings.</h4>
-                <p>You can buy 15 meetings for Rs 2. Do check out our payment options.</p>
             </div>
             <div class="profileBody" style="width: auto;">
                 <div class="sessionInfo">

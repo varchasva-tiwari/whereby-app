@@ -10,7 +10,7 @@ public class Orders {
     private String receipt;
     private String orderId;
     private int amount;
-    @OneToOne(mappedBy = "orders")
+    @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     private OrdersDtls ordersDtls;
     @ManyToOne
     private User user;
