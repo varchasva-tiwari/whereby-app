@@ -29,7 +29,7 @@ class WherebyApplicationTests extends AbstractTestNGSpringContextTests {
     @Test
     public void testUserDashboard() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/user-dashboard")
+                .get("/registration")
                 .accept(MediaType.ALL)
         ).andExpect(status().isOk());
     }
