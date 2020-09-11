@@ -4,6 +4,7 @@ import com.demo.whereby.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -50,7 +52,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/images/**",
                         "/customStyle.css",
                         "/style.css",
-                        "/openvidu-browser-2.15.0.js"
+                        "/openvidu-browser-2.15.0.js",
+                        "/google/login",
+                        "/callback"
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -77,5 +81,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

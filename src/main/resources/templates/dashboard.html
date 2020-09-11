@@ -10,6 +10,10 @@
 			padding: 2em;
 			background: white;
 		}
+
+		#permissionBtn {
+			left: 5em;
+		}
 	</style>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8"></meta>
@@ -61,7 +65,10 @@
 				<div><h1>WhereBy</h1></div>
 				<div id="join-dialog" class="jumbotron">
 					<h1>Join a video session</h1>
-					<form th:action="@{/session}" id="dashboardForm"  class="form-group" method="post">
+					<form class="form-group" th:action="@{/session}" method="post">
+						<input type="hidden" id="audioEnabled" name="audioEnabled">
+						<input type="hidden" id="videoEnabled" name="videoEnabled">
+
 						<p>
 							<label>Participant</label>
 							<input id="nickname" class="form-control" type="text" name="data" required="true" placeholder="enter display name here..."></input>
@@ -71,9 +78,10 @@
 							<input id="sessionname"class="form-control" type="text" name="session-name" required="true" placeholder="enter room here..." th:value="${guest!=null}?${guest}" th:readonly="${guest!=null}?true:false"></input>
 						</p>
 						<p class="text-center">
-							<button class="btn btn-lg btn-success" type="submit">Join!</button>
+							<button class="btn btn-lg btn-success" type="submit" id="joinBtn">Join!</button>
 						</p>
 					</form>
+
 					<button id="permissionBtn" class="btn btn-lg btn-info">Request Permission</button>
 
 					<div id="video-container">
@@ -106,6 +114,9 @@
 
 <script>
 	let constraints = '';
+	let audioEnabled = false;
+	let videoEnabled = false;
+
 	navigator.allMediaStreams = [];
 
 	document.getElementById("permissionBtn").addEventListener("click", () => {
@@ -126,12 +137,16 @@
 	document.getElementById("audioToggle").addEventListener("click", () => {
 		navigator.allMediaStreams.forEach((stream) => {
 			stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled;
+			console.log(stream.getAudioTracks()[0].enabled)
+			document.getElementById("audioEnabled").value = stream.getAudioTracks()[0].enabled;
 		})
 	})
 
 	document.getElementById("videoToggle").addEventListener("click", () => {
 		navigator.allMediaStreams.forEach((stream) => {
 			stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
+			console.log(stream.getVideoTracks()[0].enabled)
+			document.getElementById("videoEnabled").value = stream.getVideoTracks()[0].enabled;
 		})
 	})
 </script>

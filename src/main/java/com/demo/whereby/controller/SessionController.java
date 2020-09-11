@@ -1,20 +1,29 @@
 package com.demo.whereby.controller;
 
+import java.io.IOException;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.SynthEditorPaneUI;
 
 import com.demo.whereby.entity.Room;
 import com.demo.whereby.entity.User;
 import com.demo.whereby.service.interfaces.RoomService;
 import com.demo.whereby.service.interfaces.UserService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +40,8 @@ public class SessionController {
 	private RoomService roomService;
 	@Autowired
 	private OpenVidu openVidu;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Resource(name = "mapSessions")
 	private Map<String, Session> mapSessions;
@@ -62,6 +73,30 @@ public class SessionController {
 		if(httpSession.getAttribute("loggedUser") != null){
 			userData = (String) httpSession.getAttribute("loggedUser");
 		}
+
+		if(httpSession.getAttribute("googleLoggedUser") != null){
+			//google oauth
+			SecurityContext context = SecurityContextHolder.getContext();
+			User googleUser = null;
+
+			// Role associated to this user
+			googleUser = userService.findByEmail(httpSession.getAttribute("googleLoggedUser").toString());
+
+			if(googleUser == null) {
+				googleUser = new User();
+				googleUser.setName((String) context.getAuthentication().getPrincipal());
+				googleUser.setEmail((String) context.getAuthentication().getPrincipal());
+				googleUser.setPassword(passwordEncoder.encode((String) context.getAuthentication().getCredentials()));
+				googleUser.setCreatedAt(new Date());
+				String authorities = context.getAuthentication().getAuthorities().toString();
+				googleUser.setRole(context.getAuthentication().getAuthorities().toString().substring(1,authorities.length()-1));
+
+				googleUser = userService.save(googleUser);
+
+				userData = googleUser.getEmail();
+			}
+		}
+
 		String serverData = "{\"serverData\": \"" + userData + "\"}";
 		TokenOptions tokenOptions = new TokenOptions.Builder().data(serverData).role(role).build();
 		String token = null;

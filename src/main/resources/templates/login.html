@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>login</title>
     <style>
-        form{
+        #form1{
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -45,11 +45,28 @@
             text-transform: uppercase;
     }
 
+    #form2 {
+        /** margin-top: 25em;
+        margin-left: 30em; **/
+        position: absolute;
+        top: 65%;
+        left: 32%;
+    }
+
+    #googleBtn {
+        height: 3em;
+        width: 15em;
+        color: white;
+        background-color: #db3d3d;
+        margin-left: 5em;
+        border: 1px solid #db3d3d;
+    }
+
     </style>
 </head>
 <body>
     <h1>user login page</h1>
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" method="post" id="form1">
         <div th:if="${param.error}">
             <div class="alert-danger">
                 Incorrect username or password!
@@ -66,5 +83,10 @@
              <span>New User? <a th:href="@{/registration}">Register Here</a> </span>
     </form>
 
+    <form th:action="@{/google/login}" method="get" id="form2">
+        <button type="submit" id="googleBtn">
+            Sign in with Google
+        </button>
+    </form>
 </body>
 </html>
