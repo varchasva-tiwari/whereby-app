@@ -57,7 +57,7 @@
 		</div>
 
 		<form action="/user-dashboard">
-			<button id="dashboard-btn" class="btn btn-warning" type="submit">User Dashboard</button>
+			<button th:if="${session.googleLoggedUser == null}" id="dashboard-btn" class="btn btn-warning" type="submit">User Dashboard</button>
 		</form>
 
 		<div id="logged">
