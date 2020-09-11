@@ -332,6 +332,7 @@
 	let startTime = [[${ startTime }]];
 	let audioEnabled = [[${ audioEnabled }]];
     let videoEnabled = [[${ videoEnabled }]];
+    const owner = [[${owner}]]
 
 	let myAudioEnabled = true;
 	let allAudioEnabled = true;
@@ -527,14 +528,19 @@
 		div.append(name);
 		div.append(videoOnOffToggle);
 		div.append(audioOnOffToggle);
-		div.append(subUnsubOptnsContainer);
+		if(owner)div.append(subUnsubOptnsContainer);
 
 		container.append(div);
+        if(owner){
+        		videoOnOffToggle.addEventListener("click",(e)=>turnOnOffVideo(e))
+                audioOnOffToggle.addEventListener("click",(e)=>turnOnOffAudio(e))
+                subUnsubVideo.addEventListener("click",(e)=>toggleVideoOfSubscriber(e))
+                subUnsubAudio.addEventListener("click",(e)=>toggleAudioOfSubscriber(e))
+        }else{
+                videoOnOffToggle.addEventListener("click",(e)=>toggleVideoOfSubscriber(e))
+                audioOnOffToggle.addEventListener("click",(e)=>toggleAudioOfSubscriber(e))
+        }
 
-		videoOnOffToggle.addEventListener("click",(e)=>turnOnOffVideo(e))
-		audioOnOffToggle.addEventListener("click",(e)=>turnOnOffAudio(e))
-		subUnsubVideo.addEventListener("click",(e)=>toggleVideoOfSubscriber(e))
-		subUnsubAudio.addEventListener("click",(e)=>toggleAudioOfSubscriber(e))
 	}
 
 	function createElements(type,css=null,content=null,innerhtml=null){
@@ -640,7 +646,7 @@
 	});
 
 	function toggleVideoOfSubscriber(e){
-		let id = e.target.id.split("-")[0];
+		let id = owner ? e.target.id.split("-")[0] : e.target.closest("div").id.split("-")[0];
 		let subscriber = session.streamManagers.find(member=>member.stream.connection.connectionId === id)
 		if("subscribeToAudio" in subscriber.properties){
 			subscriber.subscribeToVideo(! subscriber.stream.videoActive)
@@ -650,7 +656,7 @@
 	}
 
 	function toggleAudioOfSubscriber(e){
-		let id = e.target.id.split("-")[0];
+		let id = owner ? e.target.id.split("-")[0] : e.target.closest("div").id.split("-")[0];
 		let subscriber = session.streamManagers.find(member=>member.stream.connection.connectionId === id)
 		if("subscribeToAudio" in subscriber.properties){
 			subscriber.subscribeToAudio(! subscriber.stream.audioActive)
