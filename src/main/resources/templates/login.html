@@ -50,6 +50,15 @@
         margin-left: 30em;
     }
 
+    #googleBtn {
+        height: 3em;
+        width: 15em;
+        color: white;
+        background-color: #db3d3d;
+        margin-left: 5em;
+        border: 1px solid #db3d3d;
+    }
+
     </style>
 </head>
 <body>
@@ -72,7 +81,9 @@
     </form>
 
     <form th:action="@{/google/login}" method="get" id="form2">
-        <input type="submit" value="Sign Up with Google">
+        <button type="submit" id="googleBtn">
+            Sign in with Google
+        </button>
     </form>
 </body>
 </html>
