@@ -264,7 +264,7 @@
                         <div class="subUnsubOptns">
                             <div id="xx">Turn all cams off</div>
                             <div id="yy">Turn all cams on</div>
-                            <div id="muteAllBtn">Turn all mics on/off</div>
+                            <div id="muteAll">Turn all mics on/off</div>
                         </div>
                     </div>
                 </div>
@@ -481,6 +481,21 @@
         document.getElementById("yy").addEventListener("click",(e)=>{
             const signal = {
                 type:"turnOnVideo",
+                to:[]
+            }
+            session.streamManagers.forEach(member=>{
+                if(member.stream.connection.connectionId !== session.connection.connectionId){
+                    signal.to.push(member.stream.connection);
+                }
+            })
+            session.signal(signal)
+        })
+	}
+
+    if(document.getElementById("muteAll")){
+        document.getElementById("muteAll").addEventListener("click",(e)=>{
+            const signal = {
+                type:"muteAll",
                 to:[]
             }
             session.streamManagers.forEach(member=>{
