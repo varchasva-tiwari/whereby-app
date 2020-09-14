@@ -42,18 +42,18 @@ public class PaymentController {
                                  Model model) throws RazorpayException {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         JSONObject options = new JSONObject();
-        options.put("amount", meetings*2*100);
+        options.put("amount", meetings * 2 * 100);
         options.put("currency", "INR");
-        options.put("receipt", "txn "+" "+user+" "+meetings*2*100);
+        options.put("receipt", "txn " + " " + user + " " + meetings * 2 * 100);
         Order order = razorpayClient.Orders.create(options);
         System.out.println(order);
 
-        model.addAttribute("receipt","txn "+" "+user+" "+meetings*2*100);
-        model.addAttribute("phoneNumber",phoneNumber);
-        model.addAttribute("user",user);
+        model.addAttribute("receipt", "txn " + " " + user + " " + meetings * 2 * 100);
+        model.addAttribute("phoneNumber", phoneNumber);
+        model.addAttribute("user", user);
         model.addAttribute("key", key);
-        model.addAttribute("numberOfMeeting",meetings);
-        model.addAttribute("amount", meetings*2*100);
+        model.addAttribute("numberOfMeeting", meetings);
+        model.addAttribute("amount", meetings * 2 * 100);
         model.addAttribute("order", order.get("id"));
         return "payment";
     }
@@ -61,28 +61,29 @@ public class PaymentController {
     @GetMapping("/orders")
     public String getAllOrders(Model model) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(userName != "anonymousUser"){
-            User user =  userService.findByEmail(userName);
-            if(user != null){
-                model.addAttribute("orderList",user.getOrders().stream().map(orders ->{
-                    Map<String,Object> order = new HashMap<>();
-                    order.put("reciept",(Object) orders.getReceipt());
-                    order.put("amount",(Object) orders.getAmount());
-                    order.put("orderId",(Object) orders.getOrderId());
+        if (userName != "anonymousUser") {
+            User user = userService.findByEmail(userName);
+            if (user != null) {
+                model.addAttribute("orderList", user.getOrders().stream().map(orders -> {
+                    Map<String, Object> order = new HashMap<>();
+                    order.put("reciept", (Object) orders.getReceipt());
+                    order.put("amount", (Object) orders.getAmount());
+                    order.put("orderId", (Object) orders.getOrderId());
                     return order;
                 }).collect(Collectors.toList()));
             }
         }
         return "orders";
     }
+
     @RequestMapping("/processPayment")
     public String processPayment(@ModelAttribute PaymentModel paymentModel,
                                  @RequestParam("razorpay_payment_id") String razorpayPaymentId,
                                  @RequestParam("razorpay_order_id") String razorpayOrderId,
                                  @RequestParam("razorpay_signature") String razorpaySignature,
-                                 Principal principal){
+                                 Principal principal) {
         User user = userService.findByEmail(principal.getName());
-        if(user != null){
+        if (user != null) {
             Orders order = new Orders();
             order.setAmount(Integer.parseInt(paymentModel.getAmount()));
             order.setReceipt(paymentModel.getReceipt());
@@ -94,7 +95,7 @@ public class PaymentController {
             ordersDtls.setRazorpay_signature(razorpaySignature);
             order.setOrdersDtls(ordersDtls);
             user.setOrders(order);
-            user.setMeetingsLeft(user.getMeetingsLeft()+Integer.parseInt(paymentModel.numberOfMeeting));
+            user.setMeetingsLeft(user.getMeetingsLeft() + Integer.parseInt(paymentModel.numberOfMeeting));
             userService.save(user);
             orderService.save(order);
             orderDtlService.save(ordersDtls);

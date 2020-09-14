@@ -47,8 +47,8 @@ public class DashboardController {
 
         model.addAttribute("rooms", rooms);
         model.addAttribute("userName", user.getName());
-        model.addAttribute("userId",user.getId());
-        model.addAttribute("meetingsLeft",user.getMeetingsLeft());
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("meetingsLeft", user.getMeetingsLeft());
 
         return "userDashboard";
     }
@@ -100,9 +100,6 @@ public class DashboardController {
         user.setRooms(room);
 
         Object result = userService.save(user);
-//        if (result != null) {
-//            result = roomService.save(room);
-//        }
 
         if (result != null) {
             return "redirect:/user-dashboard?roomSuccess";
@@ -119,12 +116,6 @@ public class DashboardController {
         return "redirect:/join-meeting/" + roomName;
     }
 
-    // send redirect to profile controller
-    // send redirect to logout controller
-    // send redirect to about page
-    // send redirect to contact us page
-
-
     boolean isUserLoggedIn() {
         return SecurityContextHolder.getContext().getAuthentication().
                 getPrincipal() instanceof UserDetails;
@@ -138,8 +129,8 @@ public class DashboardController {
     }
 
     @GetMapping("/buy-meeting")
-    public String buyMeeting(Model model){
-        model.addAttribute("user",SecurityContextHolder.getContext().getAuthentication().getName());
+    public String buyMeeting(Model model) {
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getName());
         return "purchaseMeeting";
     }
 

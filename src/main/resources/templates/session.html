@@ -405,6 +405,7 @@
 	}
 
 	function muteAll() {
+	console.log("mute signal generated")
 		const signal = {
 			type:"muteAll",
 			to:[]
@@ -418,6 +419,7 @@
 	}
 
 	session.on("signal:muteAll",(event)=>{
+	console.log("mute signal recieved")
 		allAudioEnabled = !allAudioEnabled;
 		if(myAudioEnabled != allAudioEnabled) {
 			myAudioEnabled = allAudioEnabled;
