@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +47,7 @@ public class ImageUploadController {
         } catch (IOException e) {
         }
 
-        return "redirect:/viewImg?fileName="+fileName+"&userId="+currentUserId;
+        return "redirect:/viewImg?fileName=" + fileName + "&userId=" + currentUserId;
     }
 
     @GetMapping("/viewImg")
@@ -65,6 +64,6 @@ public class ImageUploadController {
 
         redirectAttributes.addFlashAttribute("fileName", fileName);
 
-        return "redirect:/editProfile?userId="+currentUserId;
+        return "redirect:/editProfile?userId=" + currentUserId;
     }
 }

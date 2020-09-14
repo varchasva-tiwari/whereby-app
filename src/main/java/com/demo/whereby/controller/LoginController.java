@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -21,17 +20,13 @@ import java.util.Date;
 @Controller
 public class LoginController {
 
-    //    public static Map<String, MyUser> users = new ConcurrentHashMap<>();
+    private final int FREE_MEETINGS = 2;
     @Autowired
     private UserService userService;
-
     @Autowired
     private RoomService roomService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private final int FREE_MEETINGS = 2;
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     public String userRegistrationHandler(@ModelAttribute RegistrationModel registrationModel) {
