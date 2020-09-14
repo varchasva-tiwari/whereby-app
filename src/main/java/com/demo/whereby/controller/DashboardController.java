@@ -53,6 +53,11 @@ public class DashboardController {
         return "userDashboard";
     }
 
+    @GetMapping(value = "/user-dashboard/payment-cancel")
+    public String paymentCancel() {
+        return "redirect:/user-dashboard?paymentCancel";
+    }
+
     @PostMapping("/user-dashboard/delete-room")
     public String deleteRoom(@RequestParam("rid") Integer rid) {
 

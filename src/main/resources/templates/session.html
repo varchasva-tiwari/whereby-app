@@ -125,7 +125,7 @@
             <div>
                 <form th:action="@{/editProfile}" method="get">
                     <input type="hidden" name="userId" th:value="${currentUserId}">
-                    <input type="submit" value="Edit profile">
+                    <input th:if="${session.googleLoggedUser == null}" type="submit" value="Edit profile">
                 </form>
             </div>
             <div class="room-extras">
@@ -224,7 +224,11 @@
                     <input type="hidden" name="session-name" th:value="${sessionName}"></input>
                     <input type="hidden" name="token" th:value="${token}"></input>
                     <input type="hidden" name="userName" th:value="${userName}"></input>
-                        <button type="submit">leave</button>
+                    <div class="footerBtnDiv">
+                        <button type="submit" id="leaveBtn" class="footerBtn"><img src="footer/finger.svg"
+                                                                                   class="footerImgs"></button>
+                        <label for="leaveBtn">Leave</label>
+                    </div>
                 </form>
             </div>
 
