@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -22,6 +23,8 @@ public class GoogleAuthController {
 
     private final GoogleAuthorizationCodeFlow authorizationCodeFlow;
 
+    private final String REDIRECT_URL = "https://ec2-13-126-91-252.ap-south-1.compute.amazonaws.com:5000/callback";
+
     public GoogleAuthController(GoogleAuthorizationCodeFlow authorizationCodeFlow) {
         this.authorizationCodeFlow = authorizationCodeFlow;
     }
@@ -31,7 +34,7 @@ public class GoogleAuthController {
         GoogleAuthorizationCodeRequestUrl requestUrl =
                 authorizationCodeFlow.newAuthorizationUrl();
 
-        requestUrl.setRedirectUri("https://localhost:5000/callback");
+        requestUrl.setRedirectUri(REDIRECT_URL);
 
         String redirectUrl = requestUrl.build();
 
@@ -43,7 +46,7 @@ public class GoogleAuthController {
         GoogleAuthorizationCodeTokenRequest tokenRequest =
                 authorizationCodeFlow.newTokenRequest(code);
 
-        tokenRequest.setRedirectUri("https://localhost:5000/callback");
+        tokenRequest.setRedirectUri(REDIRECT_URL);
 
         GoogleTokenResponse tokenResponse = tokenRequest.execute();
 
